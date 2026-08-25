@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentum Pulse | Advanced Radar Pro</title>
+    <!-- Stylesheets & Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <style>
+        :root {
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --accent-cyan: #06b6d4;
+            --accent-indigo: #6366f1;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-base: #060913;
+            --card-bg: rgba(13, 18, 30, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-hover-border: rgba(6, 182, 212, 0.3);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --table-hover: rgba(6, 182, 212, 0.04);
+            --input-bg: rgba(18, 26, 43, 0.6);
+            --glow-color: rgba(6, 182, 212, 0.15);
+        }
+
+        [data-bs-theme="light"] {
+            --bg-base: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --card-hover-border: rgba(99, 102, 241, 0.3);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --table-hover: rgba(99, 102, 241, 0.04);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --glow-color: rgba(99, 102, 241, 0.1);
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-hover:hover {
+            border-color: var(--card-hover-border);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -10px var(--glow-color);
+        }
+
+        /* Gradient Typography & Highlights */
+        .navbar-brand-gradient {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-icon-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover .stat-icon-wrapper {
+            transform: scale(1.08);
+        }
+
+        /* Custom Tabs */
+        .nav-pills-custom {
+            background: var(--card-bg);
+            padding: 5px;
+            border-radius: 14px;
+            border: 1px solid var(--card-border);
+        }
+
+        .nav-pills-custom .nav-link {
+            color: var(--text-muted);
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-pills-custom .nav-link.active {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+        }
+
+        /* Inputs & Controls */
+        .form-control-custom, .form-select-custom {
+            background-color: var(--input-bg) !important;
+            border: 1px solid var(--card-border) !important;
+            color: var(--text-main) !important;
+            border-radius: 12px !important;
+            padding: 8px 14px;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control-custom:focus, .form-select-custom:focus {
+            border-color: var(--accent-cyan) !important;
+            box-shadow: 0 0 0 3px var(--glow-color) !important;
+        }
+
+        /* Data Table Stylings */
+        .table-custom {
+            margin-bottom: 0;
+        }
+
+        .table-custom th {
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--card-border);
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .table-custom td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--card-border);
+            vertical-align: middle;
+            font-size: 0.92rem;
+        }
+
+        .table-custom tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: var(--table-hover);
+        }
+
+        .font-mono {
+            font-family: var(--font-mono);
+        }
+
+        /* High Visibility Badges */
+        .badge-positive {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        .badge-negative {
+            background: rgba(244, 63, 94, 0.12);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        /* Pulse Live Indicator */
+        .pulse-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 30px;
+            padding: 6px 14px;
+        }
+
+        .pulse-live {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse-ring 1.8s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 1; }
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body class="py-4">
+
+    <div class="container-fluid px-lg-5 px-3">
+        
+        <!-- Header Nav -->
+        <nav class="navbar glass-card px-4 py-3 mb-4">
+            <div class="d-flex align-items-center justify-content-between w-100 flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info border border-info border-opacity-25">
+                        <i class="fa-solid fa-bolt-lightning fs-4 text-cyan"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-extrabold mb-0 navbar-brand-gradient">Momentum Radar Pro</h4>
+                        <small class="text-muted fw-medium fs-7">Realtime Market Trend & Breakout Engine</small>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <!-- Audio Settings Trigger -->
+                    <button class="btn glass-card btn-sm px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#soundModal">
+                        <i class="fa-solid fa-volume-high text-info me-1"></i> Audio Alerts
+                    </button>
+
+                    <!-- Theme Toggle Button -->
+                    <button class="btn glass-card btn-sm px-3 py-2 fw-semibold" onclick="toggleTheme()">
+                        <i class="fa-solid fa-sun-moon text-warning me-1" id="theme-icon"></i> <span id="theme-text">Theme</span>
+                    </button>
+
+                    <!-- Live Indicator -->
+                    <div class="pulse-container">
+                        <span class="pulse-live" id="pulse-indicator"></span>
+                        <small id="last-updated-time" class="fw-bold font-mono text-success" style="font-size: 0.8rem;">Connecting...</small>
+                    </div>
+
+                    <button id="toggle-scan-btn" class="btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3 shadow-sm" onclick="toggleScanner()">
+                        <i class="fa-solid fa-pause me-1"></i> Pause Scanner
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Metric Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small fw-bold tracking-wider text-uppercase">Intraday Breakouts</span>
+                        <h2 class="fw-extrabold mb-0 text-info mt-1 font-mono" id="count-intraday">0</h2>
+                        <small class="text-muted fs-7">5m Volume Spike Scan</small>
+                    </div>
+                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info border border-info border-opacity-25">
+                        <i class="fa-solid fa-chart-line fs-4"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small fw-bold tracking-wider text-uppercase">Monthly Watchlist</span>
+                        <h2 class="fw-extrabold mb-0 text-success mt-1 font-mono" id="count-monthly">0</h2>
+                        <small class="text-muted fs-7">44 EMA Breakout Setup</small>
+                    </div>
+                    <div class="stat-icon-wrapper bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                        <i class="fa-solid fa-calendar-check fs-4"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small fw-bold tracking-wider text-uppercase">Best Setup (Both)</span>
+                        <h2 class="fw-extrabold mb-0 text-warning mt-1 font-mono" id="count-best">0</h2>
+                        <small class="text-muted fs-7">Dual Timeframe Matches</small>
+                    </div>
+                    <div class="stat-icon-wrapper bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">
+                        <i class="fa-solid fa-star fs-4"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small fw-bold tracking-wider text-uppercase">System Status</span>
+                        <h2 class="fw-extrabold mb-0 text-primary mt-1 font-mono" id="system-status">ACTIVE</h2>
+                        <small class="text-muted fs-7">Auto Refresh Engine</small>
+                    </div>
+                    <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
+                        <i class="fa-solid fa-server fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Analytics Dashboard -->
+        <div class="row g-3 mb-4">
+            <div class="col-lg-6">
+                <div class="glass-card p-3.5 p-3 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="fw-bold mb-0 d-flex align-items-center">
+                            <i class="fa-solid fa-fire text-danger me-2"></i>Top Gainers Momentum
+                        </h6>
+                        <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1 font-mono">% Change</span>
+                    </div>
+                    <div id="gainers-chart" style="min-height: 240px;"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="glass-card p-3.5 p-3 h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="fw-bold mb-0 d-flex align-items-center">
+                            <i class="fa-solid fa-chart-pie text-warning me-2"></i>Volume Distribution Gauge
+                        </h6>
+                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2.5 py-1 font-mono">Top 5 Leaders</span>
+                    </div>
+                    <div id="volume-chart" style="min-height: 240px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+            <ul class="nav nav-pills nav-pills-custom" id="scannerTabs">
+                <li class="nav-item">
+                    <button class="nav-link active" onclick="switchTab('intraday', this)">
+                        <i class="fa-solid fa-bolt me-1"></i> Intraday Scan
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="switchTab('monthly', this)">
+                        <i class="fa-solid fa-calendar-days me-1"></i> Monthly Watchlist
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" onclick="switchTab('best_setup', this)">
+                        <i class="fa-solid fa-wand-magic-sparkles text-warning me-1"></i> Best Setup (Both)
+                    </button>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap ms-auto">
+                <!-- Stock Price Filter -->
+                <select id="priceFilter" class="form-select form-select-custom" style="width: 160px;" onchange="filterData()">
+                    <option value="0">All Prices (₹)</option>
+                    <option value="200">Price > ₹200</option>
+                    <option value="300">Price > ₹300</option>
+                    <option value="500">Price > ₹500</option>
+                    <option value="1000">Price > ₹1000</option>
+                </select>
+
+                <!-- Growth Filter -->
+                <select id="changeFilter" class="form-select form-select-custom" style="width: 160px;" onchange="filterData()">
+                    <option value="all">All Movements</option>
+                    <option value="gainers">Gainers (> 0%)</option>
+                    <option value="top_gainers">Top Gainers (> 3%)</option>
+                </select>
+
+                <!-- Search Input -->
+                <div class="input-group" style="width: 220px;">
+                    <span class="input-group-text form-control-custom border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="searchInput" class="form-control form-control-custom border-start-0 ps-0" placeholder="Search symbol..." onkeyup="filterData()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Table -->
+        <div class="glass-card overflow-hidden mb-5">
+            <div class="table-responsive">
+                <table class="table table-custom align-middle">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('nsecode')" style="cursor:pointer">Symbol <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
+                            <th onclick="sortTable('name')" style="cursor:pointer">Company <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
+                            <th onclick="sortTable('close')" style="cursor:pointer">Price (₹) <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
+                            <th onclick="sortTable('per_chg')" style="cursor:pointer">% Change <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
+                            <th onclick="sortTable('volume')" style="cursor:pointer">Volume <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <div class="spinner-border text-info mb-3" role="status"></div>
+                                <div class="fw-semibold">Loading initial scan data...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Audio Settings Modal -->
+    <div class="modal fade" id="soundModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border">
+                <div class="modal-header border-bottom border-secondary border-opacity-25">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-sliders text-info me-2"></i>Audio Alert Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="soundToggle" checked>
+                        <label class="form-check-label fw-semibold" for="soundToggle">Enable Sound Alert on New Match</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Select Alert Tone</label>
+                        <select id="soundSelect" class="form-select form-select-custom">
+                            <option value="chime">Modern Chime (High Pitch)</option>
+                            <option value="radar">Sonar Radar (Subtle Pulse)</option>
+                            <option value="bell">Digital Bell (Multi Tone)</option>
+                            <option value="beep">Simple Alert Beep</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Alert Volume</label>
+                        <input type="range" class="form-range" id="volumeSlider" min="0" max="1" step="0.1" value="0.7">
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary border-opacity-25">
+                    <button type="button" class="btn btn-outline-info btn-sm rounded-3" onclick="testSound()">
+                        <i class="fa-solid fa-play me-1"></i> Test Audio Tone
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm fw-bold rounded-3 px-3" data-bs-dismiss="modal">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentTab = 'intraday';
+        let rawData = { intraday: [], monthly: [], best_setup: [] };
+        let activeDisplayedData = [];
+        let previousCodes = new Set();
+        let sortDirection = false;
+        let isScannerPaused = false;
+        let gainersChart, volumeChart;
+
+        function toggleTheme() {
+            const htmlTag = document.documentElement;
+            const currentTheme = htmlTag.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlTag.setAttribute('data-bs-theme', newTheme);
+            renderCharts();
+        }
+
+        function playAudioTone(type = 'chime', vol = 0.7) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+                const gain = ctx.createGain();
+                gain.gain.value = parseFloat(vol);
+                gain.connect(ctx.destination);
+
+                if (type === 'chime') {
+                    const osc1 = ctx.createOscillator();
+                    const osc2 = ctx.createOscillator();
+                    osc1.frequency.setValueAtTime(523.25, now);
+                    osc2.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc1.connect(gain); osc2.connect(gain);
+                    osc1.start(now); osc1.stop(now + 0.3);
+                    osc2.start(now + 0.1); osc2.stop(now + 0.4);
+                } else if (type === 'radar') {
+                    const osc = ctx.createOscillator();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, now);
+                    osc.frequency.exponentialRampToValueAtTime(220, now + 0.3);
+                    osc.connect(gain);
+                    osc.start(now); osc.stop(now + 0.3);
+                } else if (type === 'bell') {
+                    const osc = ctx.createOscillator();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(987.77, now);
+                    osc.connect(gain);
+                    osc.start(now); osc.stop(now + 0.5);
+                } else {
+                    const osc = ctx.createOscillator();
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.connect(gain);
+                    osc.start(now); osc.stop(now + 0.15);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function testSound() {
+            playAudioTone(document.getElementById('soundSelect').value, document.getElementById('volumeSlider').value);
+        }
+
+        async function toggleScanner() {
+            const res = await fetch('/api/toggle-scanner', { method: 'POST' });
+            const data = await res.json();
+            const btn = document.getElementById('toggle-scan-btn');
+            
+            if (data.status === 'paused') {
+                isScannerPaused = true;
+                btn.className = 'btn btn-success btn-sm fw-bold px-3 py-2 rounded-3 shadow-sm';
+                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Resume Scanner';
+                document.getElementById('system-status').innerText = 'PAUSED';
+                document.getElementById('system-status').className = 'fw-extrabold mb-0 text-secondary mt-1 font-mono';
+                document.getElementById('pulse-indicator').style.backgroundColor = '#64748b';
+            } else {
+                isScannerPaused = false;
+                btn.className = 'btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3 shadow-sm';
+                btn.innerHTML = '<i class="fa-solid fa-pause me-1"></i> Pause Scanner';
+                document.getElementById('system-status').innerText = 'ACTIVE';
+                document.getElementById('system-status').className = 'fw-extrabold mb-0 text-primary mt-1 font-mono';
+                document.getElementById('pulse-indicator').style.backgroundColor = '#10b981';
+                fetchScanData();
+            }
+        }
+
+        function switchTab(tabName, element) {
+            currentTab = tabName;
+            document.querySelectorAll('#scannerTabs .nav-link').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            filterData();
+        }
+
+        function filterData() {
+            let list = [...(rawData[currentTab] || [])];
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const changeFilter = document.getElementById('changeFilter').value;
+            const minPrice = parseFloat(document.getElementById('priceFilter').value) || 0;
+
+            if (minPrice > 0) {
+                list = list.filter(item => Number(item.close) >= minPrice);
+            }
+
+            if (searchTerm) {
+                list = list.filter(item => 
+                    item.nsecode.toLowerCase().includes(searchTerm) || 
+                    item.name.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (changeFilter === 'gainers') {
+                list = list.filter(item => item.per_chg > 0);
+            } else if (changeFilter === 'top_gainers') {
+                list = list.filter(item => item.per_chg > 3.0);
+            }
+
+            activeDisplayedData = list;
+            renderTable(activeDisplayedData);
+            renderCharts();
+        }
+
+        function sortTable(columnKey) {
+            sortDirection = !sortDirection;
+            activeDisplayedData.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
+                if (typeof valA === 'string') {
+                    return sortDirection ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                }
+                return sortDirection ? valA - valB : valB - valA;
+            });
+            renderTable(activeDisplayedData);
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-folder-open fs-3 mb-2 opacity-50"></i>
+                            <div class="fw-medium">No stocks matched the current filter criteria.</div>
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            data.forEach(stock => {
+                const isPositive = stock.per_chg >= 0;
+                const badgeClass = isPositive ? 'badge-positive' : 'badge-negative';
+                const sign = isPositive ? '+' : '';
+                const tvLink = `https://www.tradingview.com/chart/?symbol=NSE:${stock.nsecode}`;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fw-bold font-mono text-info">${stock.nsecode}</td>
+                    <td class="fw-semibold">${stock.name}</td>
+                    <td class="fw-bold font-mono">₹${Number(stock.close).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                    <td><span class="badge ${badgeClass} rounded-pill px-3 py-1.5">${sign}${stock.per_chg}%</span></td>
+                    <td class="text-muted font-mono">${Number(stock.volume).toLocaleString('en-IN')}</td>
+                    <td class="text-end">
+                        <a href="${tvLink}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 py-1 fw-semibold">
+                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Chart
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+       function renderCharts() {
+            const topGainers = [...activeDisplayedData].sort((a,b) => b.per_chg - a.per_chg).slice(0, 5);
+            const topVolume = [...activeDisplayedData].sort((a,b) => b.volume - a.volume).slice(0, 5);
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+
+            const textMutedColor = isDark ? '#94a3b8' : '#64748b';
+            const gridBorderColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+
+            // Modern Top Gainers Chart Config
+            const gainersOptions = {
+                chart: { 
+                    type: 'bar', 
+                    height: 300, 
+                    toolbar: { show: false }, 
+                    background: 'transparent',
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                theme: { mode: isDark ? 'dark' : 'light' },
+                series: [{ name: '% Change', data: topGainers.map(s => parseFloat(s.per_chg)) }],
+                xaxis: { 
+                    categories: topGainers.map(s => s.nsecode),
+                    axisBorder: { show: false },
+                    axisTicks: { show: false },
+                    labels: { 
+                        style: { 
+                            fontFamily: 'JetBrains Mono',
+                            fontWeight: 600,
+                            colors: textMutedColor
+                        } 
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: { fontFamily: 'JetBrains Mono', colors: textMutedColor },
+                        formatter: val => `${val}%`
+                    }
+                },
+                grid: {
+                    borderColor: gridBorderColor,
+                    strokeDashArray: 4,
+                    yaxis: { lines: { show: true } }
+                },
+                colors: ['#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7'],
+                plotOptions: { 
+                    bar: { 
+                        borderRadius: 8, 
+                        borderRadiusApplication: 'end',
+                        columnWidth: '40%', 
+                        distributed: true 
+                    } 
+                },
+                legend: { show: false }, // Removes duplicate bottom legend
+                dataLabels: { 
+                    enabled: true, 
+                    offsetY: -22,
+                    formatter: val => `${val}%`,
+                    style: { 
+                        fontFamily: 'JetBrains Mono', 
+                        fontWeight: '700',
+                        fontSize: '12px',
+                        colors: [isDark ? '#f8fafc' : '#0f172a'] 
+                    }
+                },
+                tooltip: {
+                    theme: isDark ? 'dark' : 'light',
+                    y: { formatter: val => `${val}% Growth` }
+                }
+            };
+
+            // Modern Volume Donut Gauge Config
+            const totalVolumeSum = topVolume.reduce((acc, curr) => acc + Number(curr.volume), 0);
+            
+            const volumeOptions = {
+                chart: { 
+                    type: 'donut', 
+                    height: 350, 
+                    background: 'transparent',
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                theme: { mode: isDark ? 'dark' : 'light' },
+                series: topVolume.map(s => Number(s.volume)),
+                labels: topVolume.map(s => s.nsecode),
+                colors: ['#06b6d4', '#10b981', '#f59e0b', '#818cf8', '#f43f5e'],
+                stroke: {
+                    show: true,
+                    width: 3,
+                    colors: [isDark ? '#0d121e' : '#ffffff']
+                },
+                plotOptions: {
+                    pie: {
+                        donut: { 
+                            size: '72%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: true,
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontWeight: 600,
+                                    color: textMutedColor,
+                                    offsetY: -5
+                                },
+                                value: {
+                                    show: true,
+                                    fontFamily: 'JetBrains Mono',
+                                    fontWeight: 700,
+                                    color: isDark ? '#f8fafc' : '#0f172a',
+                                    offsetY: 5,
+                                    formatter: val => Number(val).toLocaleString('en-IN')
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Top 5 Vol',
+                                    color: textMutedColor,
+                                    formatter: () => Number(totalVolumeSum).toLocaleString('en-IN')
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: { enabled: false },
+                legend: { 
+                    position: 'bottom', 
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: 600,
+                    labels: { colors: textMutedColor }
+                },
+                tooltip: {
+                    theme: isDark ? 'dark' : 'light',
+                    y: { formatter: val => `${Number(val).toLocaleString('en-IN')} shares` }
+                }
+            };
+
+            if (gainersChart) gainersChart.destroy();
+            if (volumeChart) volumeChart.destroy();
+
+            gainersChart = new ApexCharts(document.querySelector("#gainers-chart"), gainersOptions);
+            volumeChart = new ApexCharts(document.querySelector("#volume-chart"), volumeOptions);
+            
+            gainersChart.render();
+            volumeChart.render();
+        }
+
+        async function fetchScanData() {
+            if (isScannerPaused) return;
+
+            try {
+                const response = await fetch('/api/data');
+                const resData = await response.json();
+
+                if (resData.is_paused) return;
+
+                rawData = resData.results;
+
+                const currentTabCodes = new Set((rawData[currentTab] || []).map(s => s.nsecode));
+                let hasNewStock = false;
+
+                currentTabCodes.forEach(code => {
+                    if (!previousCodes.has(code)) hasNewStock = true;
+                });
+
+                if (hasNewStock && previousCodes.size > 0 && document.getElementById('soundToggle').checked) {
+                    playAudioTone(document.getElementById('soundSelect').value, document.getElementById('volumeSlider').value);
+                }
+
+                previousCodes = currentTabCodes;
+
+                document.getElementById('count-intraday').innerText = rawData.intraday.length;
+                document.getElementById('count-monthly').innerText = rawData.monthly.length;
+                document.getElementById('count-best').innerText = rawData.best_setup.length;
+                document.getElementById('last-updated-time').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
+
+                filterData();
+            } catch (err) {
+                console.error("Fetch Error:", err);
+            }
+        }
+
+        setInterval(fetchScanData, 5000);
+        fetchScanData();
+    </script>
+</body>
+</html>
