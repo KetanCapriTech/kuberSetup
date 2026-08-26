@@ -3,430 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momentum Pulse | Advanced Radar Pro</title>
-    <!-- Stylesheets & Fonts -->
+    <title>Chartink Scanner Terminal</title>
+    
+    <!-- Bootstrap 5 CSS & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Google Fonts & ApexCharts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <style>
         :root {
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --bg-body-dark: #090d16;
+            --card-bg-dark: #111827;
+            --card-border-dark: #1f2937;
             --accent-cyan: #06b6d4;
-            --accent-indigo: #6366f1;
             --accent-green: #10b981;
+            --accent-red: #ef4444;
             --accent-amber: #f59e0b;
-            --accent-rose: #f43f5e;
-        }
-
-        [data-bs-theme="dark"] {
-            --bg-base: #060913;
-            --card-bg: rgba(13, 18, 30, 0.7);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --card-hover-border: rgba(6, 182, 212, 0.3);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --table-hover: rgba(6, 182, 212, 0.04);
-            --input-bg: rgba(18, 26, 43, 0.6);
-            --glow-color: rgba(6, 182, 212, 0.15);
-        }
-
-        [data-bs-theme="light"] {
-            --bg-base: #f8fafc;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(0, 0, 0, 0.08);
-            --card-hover-border: rgba(99, 102, 241, 0.3);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --table-hover: rgba(99, 102, 241, 0.04);
-            --input-bg: rgba(255, 255, 255, 0.9);
-            --glow-color: rgba(99, 102, 241, 0.1);
         }
 
         body {
-            font-family: var(--font-main);
-            background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
-            background-attachment: fixed;
-            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body-dark);
+            color: #f3f4f6;
             min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 18px;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .glass-card-hover:hover {
-            border-color: var(--card-hover-border);
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px -10px var(--glow-color);
-        }
-
-        /* Gradient Typography & Highlights */
-        .navbar-brand-gradient {
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .stat-icon-wrapper {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease;
-        }
-
-        .glass-card:hover .stat-icon-wrapper {
-            transform: scale(1.08);
-        }
-
-        /* Custom Tabs */
-        .nav-pills-custom {
-            background: var(--card-bg);
-            padding: 5px;
-            border-radius: 14px;
-            border: 1px solid var(--card-border);
-        }
-
-        .nav-pills-custom .nav-link {
-            color: var(--text-muted);
-            border-radius: 10px;
-            padding: 8px 18px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-
-        .nav-pills-custom .nav-link.active {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
-            color: #38bdf8;
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
-        }
-
-        /* Inputs & Controls */
-        .form-control-custom, .form-select-custom {
-            background-color: var(--input-bg) !important;
-            border: 1px solid var(--card-border) !important;
-            color: var(--text-main) !important;
-            border-radius: 12px !important;
-            padding: 8px 14px;
-            font-size: 0.88rem;
-            transition: all 0.2s ease;
-        }
-
-        .form-control-custom:focus, .form-select-custom:focus {
-            border-color: var(--accent-cyan) !important;
-            box-shadow: 0 0 0 3px var(--glow-color) !important;
-        }
-
-        /* Data Table Stylings */
-        .table-custom {
-            margin-bottom: 0;
-        }
-
-        .table-custom th {
-            text-transform: uppercase;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: var(--text-muted);
-            border-bottom: 1px solid var(--card-border);
-            padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .table-custom td {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--card-border);
-            vertical-align: middle;
-            font-size: 0.92rem;
-        }
-
-        .table-custom tbody tr {
-            transition: background-color 0.2s ease;
-        }
-
-        .table-custom tbody tr:hover {
-            background-color: var(--table-hover);
         }
 
         .font-mono {
-            font-family: var(--font-mono);
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        /* High Visibility Badges */
+        .glass-card {
+            background-color: var(--card-bg-dark);
+            border: 1px solid var(--card-border-dark);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Scrollable Tab Navigation Bar to prevent overflow off-screen */
+        .nav-tabs-scroll {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav-tabs-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .nav-tabs-scroll::-webkit-scrollbar-thumb {
+            background: var(--card-border-dark);
+            border-radius: 4px;
+        }
+
+        .nav-pills .nav-link {
+            color: #9ca3af;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 8px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-pills .nav-link:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--accent-cyan);
+            color: #000000;
+        }
+
         .badge-positive {
-            background: rgba(16, 185, 129, 0.12);
-            color: #10b981;
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            font-family: var(--font-mono);
-            font-weight: 700;
         }
 
         .badge-negative {
-            background: rgba(244, 63, 94, 0.12);
-            color: #f43f5e;
-            border: 1px solid rgba(244, 63, 94, 0.3);
-            font-family: var(--font-mono);
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-strategy {
+            background-color: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-bottom: 2px;
+            display: inline-block;
+        }
+
+        .table-custom {
+            --bs-table-bg: transparent;
+            --bs-table-color: #f3f4f6;
+        }
+
+        .table-custom th {
+            border-bottom: 2px solid var(--card-border-dark);
+            color: #9ca3af;
             font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
         }
 
-        /* Pulse Live Indicator */
-        .pulse-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 30px;
-            padding: 6px 14px;
+        .table-custom td {
+            border-bottom: 1px solid var(--card-border-dark);
+            vertical-align: middle;
         }
 
-        .pulse-live {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-green);
-            animation: pulse-ring 1.8s infinite;
+        .form-select-custom, .form-control-custom {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: #f3f4f6;
+            border-radius: 8px;
         }
 
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.4; }
-            100% { transform: scale(0.95); opacity: 1; }
-        }
-
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-base);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--card-border);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+        .form-select-custom:focus, .form-control-custom:focus {
+            background-color: #1f2937;
+            border-color: var(--accent-cyan);
+            color: #f3f4f6;
+            box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25);
         }
     </style>
 </head>
-<body class="py-4">
+<body class="p-3 p-md-4">
 
-    <div class="container-fluid px-lg-5 px-3">
-        
-        <!-- Header Nav -->
-        <nav class="navbar glass-card px-4 py-3 mb-4">
-            <div class="d-flex align-items-center justify-content-between w-100 flex-wrap gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info border border-info border-opacity-25">
-                        <i class="fa-solid fa-bolt-lightning fs-4 text-cyan"></i>
-                    </div>
-                    <div>
-                        <h4 class="fw-extrabold mb-0 navbar-brand-gradient">Momentum Radar Pro</h4>
-                        <small class="text-muted fw-medium fs-7">Realtime Market Trend & Breakout Engine</small>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <!-- Audio Settings Trigger -->
-                    <button class="btn glass-card btn-sm px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#soundModal">
-                        <i class="fa-solid fa-volume-high text-info me-1"></i> Audio Alerts
-                    </button>
-
-                    <!-- Theme Toggle Button -->
-                    <button class="btn glass-card btn-sm px-3 py-2 fw-semibold" onclick="toggleTheme()">
-                        <i class="fa-solid fa-sun-moon text-warning me-1" id="theme-icon"></i> <span id="theme-text">Theme</span>
-                    </button>
-
-                    <!-- Live Indicator -->
-                    <div class="pulse-container">
-                        <span class="pulse-live" id="pulse-indicator"></span>
-                        <small id="last-updated-time" class="fw-bold font-mono text-success" style="font-size: 0.8rem;">Connecting...</small>
-                    </div>
-
-                    <button id="toggle-scan-btn" class="btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3 shadow-sm" onclick="toggleScanner()">
-                        <i class="fa-solid fa-pause me-1"></i> Pause Scanner
-                    </button>
+    <div class="container-fluid">
+        <!-- Top Navigation Header -->
+        <header class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary border-opacity-25">
+            <div class="d-flex align-items-center mb-2 mb-md-0">
+                <i class="fa-solid fa-chart-line text-info fs-3 me-3"></i>
+                <div>
+                    <h4 class="fw-extrabold m-0 text-light">Chartink Terminal</h4>
+                    <span class="badge bg-secondary opacity-75 font-mono small" id="last-updated-time">Sync: Initializing...</span>
                 </div>
             </div>
-        </nav>
 
-        <!-- Metric Cards -->
+            <div class="d-flex gap-2 align-items-center">
+                <button id="toggle-scan-btn" onclick="toggleScanner()" class="btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3">
+                    <i class="fa-solid fa-pause me-1"></i> Pause
+                </button>
+                <button onclick="toggleTheme()" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                </button>
+                <button class="btn btn-outline-info btn-sm px-3 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#soundModal">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Strategy Tabs Navigation (Scrollable container added) -->
+        <ul class="nav nav-pills nav-tabs-scroll gap-2 mb-4" id="scannerTabs">
+            <li class="nav-item">
+                <button class="nav-link active" onclick="switchTab('intraday', this)">
+                    Intraday <span class="badge bg-dark ms-1" id="count-intraday">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('monthly', this)">
+                    Monthly <span class="badge bg-dark ms-1" id="count-monthly">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('best_setup', this)">
+                    Best Setup <span class="badge bg-dark ms-1" id="count-best">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('strong_vol_hh', this)">
+                    Strong Vol HH <span class="badge bg-dark ms-1" id="count-strong-vol">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('liquidity_hunt', this)">
+                    Liquidity Hunt <span class="badge bg-dark ms-1" id="count-liq-hunt">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('near_trendline', this)">
+                    Near Trendline <span class="badge bg-dark ms-1" id="count-near-trendline">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" onclick="switchTab('market_momentum', this)">
+                    Market Momentum <span class="badge bg-dark ms-1" id="count-market-momentum">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link text-warning" onclick="switchTab('super_probability', this)">
+                    <i class="fa-solid fa-bolt me-1"></i> Super Prob <span class="badge bg-dark ms-1" id="count-super-prob">0</span>
+                </button>
+            </li>
+        </ul>
+
+        <!-- Strategy Checkbox Controls (Visible only on Super Probability Tab) -->
+        <div class="glass-card p-3 mb-4" id="super-prob-filters" style="display: none;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <label class="form-label text-warning small fw-bold text-uppercase mb-0">
+                    <i class="fa-solid fa-filter me-1"></i> Filter Super Probability Setups (Must Match Selected)
+                </label>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-info btn-sm py-0 px-2" style="font-size: 0.75rem;" onclick="selectAllSuperCheckboxes(true)">Select All</button>
+                    <button class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size: 0.75rem;" onclick="selectAllSuperCheckboxes(false)">Clear All</button>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-3 pt-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_intraday" value="intraday" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_intraday">Intraday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_monthly" value="monthly" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_monthly">Monthly</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_best_setup" value="best_setup" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_best_setup">Best Setup</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_strong_vol_hh" value="strong_vol_hh" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_strong_vol_hh">Strong Vol HH</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_liquidity_hunt" value="liquidity_hunt" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_liquidity_hunt">Liquidity Hunt</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_near_trendline" value="near_trendline" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_near_trendline">Near Trendline</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_market_momentum" value="market_momentum" onchange="filterData()" checked>
+                    <label class="form-check-label text-light small fw-semibold" for="chk_market_momentum">Market Momentum</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Dashboard Row -->
         <div class="row g-3 mb-4">
-            <div class="col-xl-3 col-md-6">
-                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small fw-bold tracking-wider text-uppercase">Intraday Breakouts</span>
-                        <h2 class="fw-extrabold mb-0 text-info mt-1 font-mono" id="count-intraday">0</h2>
-                        <small class="text-muted fs-7">5m Volume Spike Scan</small>
-                    </div>
-                    <div class="stat-icon-wrapper bg-info bg-opacity-10 text-info border border-info border-opacity-25">
-                        <i class="fa-solid fa-chart-line fs-4"></i>
-                    </div>
+            <div class="col-md-6">
+                <div class="glass-card p-3">
+                    <h6 class="fw-bold text-muted mb-2"><i class="fa-solid fa-chart-bar text-info me-2"></i>Top Gainers (% Chg)</h6>
+                    <div id="gainers-chart"></div>
                 </div>
             </div>
-
-            <div class="col-xl-3 col-md-6">
-                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small fw-bold tracking-wider text-uppercase">Monthly Watchlist</span>
-                        <h2 class="fw-extrabold mb-0 text-success mt-1 font-mono" id="count-monthly">0</h2>
-                        <small class="text-muted fs-7">44 EMA Breakout Setup</small>
-                    </div>
-                    <div class="stat-icon-wrapper bg-success bg-opacity-10 text-success border border-success border-opacity-25">
-                        <i class="fa-solid fa-calendar-check fs-4"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small fw-bold tracking-wider text-uppercase">Best Setup (Both)</span>
-                        <h2 class="fw-extrabold mb-0 text-warning mt-1 font-mono" id="count-best">0</h2>
-                        <small class="text-muted fs-7">Dual Timeframe Matches</small>
-                    </div>
-                    <div class="stat-icon-wrapper bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">
-                        <i class="fa-solid fa-star fs-4"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-                <div class="glass-card glass-card-hover p-3.5 p-3 d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-muted small fw-bold tracking-wider text-uppercase">System Status</span>
-                        <h2 class="fw-extrabold mb-0 text-primary mt-1 font-mono" id="system-status">ACTIVE</h2>
-                        <small class="text-muted fs-7">Auto Refresh Engine</small>
-                    </div>
-                    <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
-                        <i class="fa-solid fa-server fs-4"></i>
-                    </div>
+            <div class="col-md-6">
+                <div class="glass-card p-3">
+                    <h6 class="fw-bold text-muted mb-2"><i class="fa-solid fa-chart-pie text-success me-2"></i>Volume Distribution</h6>
+                    <div id="volume-chart"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Visual Analytics Dashboard -->
-        <div class="row g-3 mb-4">
-            <div class="col-lg-6">
-                <div class="glass-card p-3.5 p-3 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-bold mb-0 d-flex align-items-center">
-                            <i class="fa-solid fa-fire text-danger me-2"></i>Top Gainers Momentum
-                        </h6>
-                        <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1 font-mono">% Change</span>
+        <!-- Filter Tools Bar -->
+        <div class="glass-card p-3 mb-4">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" id="searchInput" onkeyup="filterData()" class="form-control form-control-custom" placeholder="Search by stock or name...">
                     </div>
-                    <div id="gainers-chart" style="min-height: 240px;"></div>
                 </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="glass-card p-3.5 p-3 h-100">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-bold mb-0 d-flex align-items-center">
-                            <i class="fa-solid fa-chart-pie text-warning me-2"></i>Volume Distribution Gauge
-                        </h6>
-                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2.5 py-1 font-mono">Top 5 Leaders</span>
-                    </div>
-                    <div id="volume-chart" style="min-height: 240px;"></div>
+                <div class="col-md-3">
+                    <select id="changeFilter" onchange="filterData()" class="form-select form-select-custom">
+                        <option value="all">All % Changes</option>
+                        <option value="gainers">Positive Gainers (> 0%)</option>
+                        <option value="top_gainers">Top Gainers (> 3%)</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" id="priceFilter" onkeyup="filterData()" class="form-control form-control-custom" placeholder="Min Price (₹)">
                 </div>
             </div>
         </div>
 
-        <!-- Filter Controls -->
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
-            <ul class="nav nav-pills nav-pills-custom" id="scannerTabs">
-                <li class="nav-item">
-                    <button class="nav-link active" onclick="switchTab('intraday', this)">
-                        <i class="fa-solid fa-bolt me-1"></i> Intraday Scan
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" onclick="switchTab('monthly', this)">
-                        <i class="fa-solid fa-calendar-days me-1"></i> Monthly Watchlist
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" onclick="switchTab('best_setup', this)">
-                        <i class="fa-solid fa-wand-magic-sparkles text-warning me-1"></i> Best Setup (Both)
-                    </button>
-                </li>
-            </ul>
-
-            <div class="d-flex align-items-center gap-2 flex-wrap ms-auto">
-                <!-- Stock Price Filter -->
-                <select id="priceFilter" class="form-select form-select-custom" style="width: 160px;" onchange="filterData()">
-                    <option value="0">All Prices (₹)</option>
-                    <option value="200">Price > ₹200</option>
-                    <option value="300">Price > ₹300</option>
-                    <option value="500">Price > ₹500</option>
-                    <option value="1000">Price > ₹1000</option>
-                </select>
-
-                <!-- Growth Filter -->
-                <select id="changeFilter" class="form-select form-select-custom" style="width: 160px;" onchange="filterData()">
-                    <option value="all">All Movements</option>
-                    <option value="gainers">Gainers (> 0%)</option>
-                    <option value="top_gainers">Top Gainers (> 3%)</option>
-                </select>
-
-                <!-- Search Input -->
-                <div class="input-group" style="width: 220px;">
-                    <span class="input-group-text form-control-custom border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                    <input type="text" id="searchInput" class="form-control form-control-custom border-start-0 ps-0" placeholder="Search symbol..." onkeyup="filterData()">
-                </div>
-            </div>
-        </div>
-
-        <!-- Stock Table -->
-        <div class="glass-card overflow-hidden mb-5">
+        <!-- Results Table -->
+        <div class="glass-card p-3">
             <div class="table-responsive">
                 <table class="table table-custom align-middle">
                     <thead>
                         <tr>
-                            <th onclick="sortTable('nsecode')" style="cursor:pointer">Symbol <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
-                            <th onclick="sortTable('name')" style="cursor:pointer">Company <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
-                            <th onclick="sortTable('close')" style="cursor:pointer">Price (₹) <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
-                            <th onclick="sortTable('per_chg')" style="cursor:pointer">% Change <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
-                            <th onclick="sortTable('volume')" style="cursor:pointer">Volume <i class="fa-solid fa-sort ms-1 opacity-50"></i></th>
+                            <th onclick="sortTable('nsecode')">Symbol <i class="fa-solid fa-sort ms-1"></i></th>
+                            <th onclick="sortTable('name')">Name <i class="fa-solid fa-sort ms-1"></i></th>
+                            <th onclick="sortTable('close')">Price <i class="fa-solid fa-sort ms-1"></i></th>
+                            <th onclick="sortTable('per_chg')">% Change <i class="fa-solid fa-sort ms-1"></i></th>
+                            <th onclick="sortTable('volume')">Volume <i class="fa-solid fa-sort ms-1"></i></th>
+                            <th id="th-matched-strategies" style="display: none;">Matched Strategies</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                <div class="spinner-border text-info mb-3" role="status"></div>
-                                <div class="fw-semibold">Loading initial scan data...</div>
-                            </td>
-                        </tr>
+                        <!-- Dynamic Stock Content -->
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
 
     <!-- Audio Settings Modal -->
@@ -438,97 +317,156 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body py-4">
-                    <div class="form-check form-switch mb-4">
+                    <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" id="soundToggle" checked>
-                        <label class="form-check-label fw-semibold" for="soundToggle">Enable Sound Alert on New Match</label>
+                        <label class="form-check-label fw-semibold" for="soundToggle">Standard Alert Tone</label>
+                    </div>
+
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="vipSoundToggle" checked>
+                        <label class="form-check-label fw-semibold text-warning" for="vipSoundToggle"><i class="fa-solid fa-crown me-1"></i> Best Setup Alert Tone</label>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Select Alert Tone</label>
-                        <select id="soundSelect" class="form-select form-select-custom">
-                            <option value="chime">Modern Chime (High Pitch)</option>
-                            <option value="radar">Sonar Radar (Subtle Pulse)</option>
-                            <option value="bell">Digital Bell (Multi Tone)</option>
-                            <option value="beep">Simple Alert Beep</option>
+                        <label class="form-label text-muted small fw-bold text-uppercase">Standard Tone Style</label>
+                        <select id="soundSelect" class="form-select form-select-custom" onchange="playAlertSound('standard')">
+                            <option value="chime">Modern Chime</option>
+                            <option value="radar">Sonar Radar</option>
+                            <option value="bell">Digital Bell</option>
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Alert Volume</label>
+                    <div class="mb-4">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Volume</label>
                         <input type="range" class="form-range" id="volumeSlider" min="0" max="1" step="0.1" value="0.7">
                     </div>
-                </div>
-                <div class="modal-footer border-top border-secondary border-opacity-25">
-                    <button type="button" class="btn btn-outline-info btn-sm rounded-3" onclick="testSound()">
-                        <i class="fa-solid fa-play me-1"></i> Test Audio Tone
-                    </button>
-                    <button type="button" class="btn btn-info btn-sm fw-bold rounded-3 px-3" data-bs-dismiss="modal">Save Changes</button>
+
+                    <div class="d-flex gap-2 pt-2 border-top border-secondary border-opacity-25">
+                        <button type="button" class="btn btn-outline-info btn-sm w-100 fw-bold" onclick="playAlertSound('standard')">
+                            <i class="fa-solid fa-play me-1"></i> Test Standard
+                        </button>
+                        <button type="button" class="btn btn-outline-warning btn-sm w-100 fw-bold" onclick="playAlertSound('vip')">
+                            <i class="fa-solid fa-play me-1"></i> Test VIP Setup
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Bootstrap & Main Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let currentTab = 'intraday';
-        let rawData = { intraday: [], monthly: [], best_setup: [] };
+        let rawData = { intraday: [], monthly: [], best_setup: [], strong_vol_hh: [], liquidity_hunt: [], near_trendline: [], market_momentum: [], super_probability: [] };
         let activeDisplayedData = [];
-        let previousCodes = new Set();
         let sortDirection = false;
         let isScannerPaused = false;
         let gainersChart, volumeChart;
 
-        function toggleTheme() {
-            const htmlTag = document.documentElement;
-            const currentTheme = htmlTag.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            htmlTag.setAttribute('data-bs-theme', newTheme);
-            renderCharts();
+        let previousStockCounts = { standard: 0, super: 0 };
+        let audioCtx = null;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
+        document.addEventListener('click', initAudioContext, { once: true });
 
-        function playAudioTone(type = 'chime', vol = 0.7) {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                const ctx = new AudioCtx();
-                const now = ctx.currentTime;
-                const gain = ctx.createGain();
-                gain.gain.value = parseFloat(vol);
-                gain.connect(ctx.destination);
+        function playAlertSound(type = 'standard') {
+            initAudioContext();
+            if (!audioCtx) return;
 
-                if (type === 'chime') {
-                    const osc1 = ctx.createOscillator();
-                    const osc2 = ctx.createOscillator();
-                    osc1.frequency.setValueAtTime(523.25, now);
-                    osc2.frequency.setValueAtTime(659.25, now + 0.1);
-                    osc1.connect(gain); osc2.connect(gain);
-                    osc1.start(now); osc1.stop(now + 0.3);
-                    osc2.start(now + 0.1); osc2.stop(now + 0.4);
-                } else if (type === 'radar') {
-                    const osc = ctx.createOscillator();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(880, now);
-                    osc.frequency.exponentialRampToValueAtTime(220, now + 0.3);
-                    osc.connect(gain);
-                    osc.start(now); osc.stop(now + 0.3);
-                } else if (type === 'bell') {
-                    const osc = ctx.createOscillator();
+            const isStandardEnabled = document.getElementById('soundToggle')?.checked;
+            const isVipEnabled = document.getElementById('vipSoundToggle')?.checked;
+            const soundType = document.getElementById('soundSelect')?.value || 'chime';
+            const volume = parseFloat(document.getElementById('volumeSlider')?.value || 0.7);
+
+            if (type === 'standard' && !isStandardEnabled) return;
+            if (type === 'vip' && !isVipEnabled) return;
+
+            const masterGain = audioCtx.createGain();
+            masterGain.gain.setValueAtTime(volume, audioCtx.currentTime);
+            masterGain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'vip') {
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(987.77, now);
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+                    gain.gain.setValueAtTime(0.3, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+
                     osc.connect(gain);
-                    osc.start(now); osc.stop(now + 0.5);
-                } else {
-                    const osc = ctx.createOscillator();
-                    osc.frequency.setValueAtTime(440, now);
+                    gain.connect(masterGain);
+
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.3);
+                });
+                return;
+            }
+
+            if (soundType === 'radar') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, now);
+                osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
+
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start(now);
+                osc.stop(now + 0.25);
+
+            } else if (soundType === 'bell') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, now);
+
+                gain.gain.setValueAtTime(0.6, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start(now);
+                osc.stop(now + 0.6);
+
+            } else {
+                [587.33, 880].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+
+                    gain.gain.setValueAtTime(0.4, now + idx * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.35);
+
                     osc.connect(gain);
-                    osc.start(now); osc.stop(now + 0.15);
-                }
-            } catch (e) {
-                console.error(e);
+                    gain.connect(masterGain);
+
+                    osc.start(now + idx * 0.12);
+                    osc.stop(now + idx * 0.12 + 0.35);
+                });
             }
         }
 
-        function testSound() {
-            playAudioTone(document.getElementById('soundSelect').value, document.getElementById('volumeSlider').value);
+        function toggleTheme() {
+            const htmlTag = document.documentElement;
+            const currentTheme = htmlTag.getAttribute('data-bs-theme');
+            htmlTag.setAttribute('data-bs-theme', currentTheme === 'dark' ? 'light' : 'dark');
+            renderCharts();
         }
 
         async function toggleScanner() {
@@ -538,18 +476,12 @@
             
             if (data.status === 'paused') {
                 isScannerPaused = true;
-                btn.className = 'btn btn-success btn-sm fw-bold px-3 py-2 rounded-3 shadow-sm';
-                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Resume Scanner';
-                document.getElementById('system-status').innerText = 'PAUSED';
-                document.getElementById('system-status').className = 'fw-extrabold mb-0 text-secondary mt-1 font-mono';
-                document.getElementById('pulse-indicator').style.backgroundColor = '#64748b';
+                btn.className = 'btn btn-success btn-sm fw-bold px-3 py-2 rounded-3';
+                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i> Resume';
             } else {
                 isScannerPaused = false;
-                btn.className = 'btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3 shadow-sm';
-                btn.innerHTML = '<i class="fa-solid fa-pause me-1"></i> Pause Scanner';
-                document.getElementById('system-status').innerText = 'ACTIVE';
-                document.getElementById('system-status').className = 'fw-extrabold mb-0 text-primary mt-1 font-mono';
-                document.getElementById('pulse-indicator').style.backgroundColor = '#10b981';
+                btn.className = 'btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3';
+                btn.innerHTML = '<i class="fa-solid fa-pause me-1"></i> Pause';
                 fetchScanData();
             }
         }
@@ -558,6 +490,23 @@
             currentTab = tabName;
             document.querySelectorAll('#scannerTabs .nav-link').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
+
+            const strategyHeader = document.getElementById('th-matched-strategies');
+            const superProbFilters = document.getElementById('super-prob-filters');
+
+            if (currentTab === 'super_probability') {
+                strategyHeader.style.display = 'table-cell';
+                superProbFilters.style.display = 'block';
+            } else {
+                strategyHeader.style.display = 'none';
+                superProbFilters.style.display = 'none';
+            }
+
+            filterData();
+        }
+
+        function selectAllSuperCheckboxes(status) {
+            document.querySelectorAll('.super-filter-chk').forEach(chk => chk.checked = status);
             filterData();
         }
 
@@ -567,10 +516,17 @@
             const changeFilter = document.getElementById('changeFilter').value;
             const minPrice = parseFloat(document.getElementById('priceFilter').value) || 0;
 
-            if (minPrice > 0) {
-                list = list.filter(item => Number(item.close) >= minPrice);
+            if (currentTab === 'super_probability') {
+                const selectedStrategies = Array.from(document.querySelectorAll('.super-filter-chk:checked'))
+                    .map(chk => chk.value);
+
+                list = list.filter(item => {
+                    if (!item.matched_strategies) return false;
+                    return selectedStrategies.every(strat => item.matched_strategies.includes(strat));
+                });
             }
 
+            if (minPrice > 0) list = list.filter(item => Number(item.close) >= minPrice);
             if (searchTerm) {
                 list = list.filter(item => 
                     item.nsecode.toLowerCase().includes(searchTerm) || 
@@ -578,11 +534,8 @@
                 );
             }
 
-            if (changeFilter === 'gainers') {
-                list = list.filter(item => item.per_chg > 0);
-            } else if (changeFilter === 'top_gainers') {
-                list = list.filter(item => item.per_chg > 3.0);
-            }
+            if (changeFilter === 'gainers') list = list.filter(item => item.per_chg > 0);
+            else if (changeFilter === 'top_gainers') list = list.filter(item => item.per_chg > 3.0);
 
             activeDisplayedData = list;
             renderTable(activeDisplayedData);
@@ -606,12 +559,15 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
+            const isSuperTab = currentTab === 'super_probability';
+            const colSpanCount = isSuperTab ? 7 : 6;
+
             if (data.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
+                        <td colspan="${colSpanCount}" class="text-center py-5 text-muted">
                             <i class="fa-solid fa-folder-open fs-3 mb-2 opacity-50"></i>
-                            <div class="fw-medium">No stocks matched the current filter criteria.</div>
+                            <div>No stocks matched the active filters.</div>
                         </td>
                     </tr>`;
                 return;
@@ -623,6 +579,11 @@
                 const sign = isPositive ? '+' : '';
                 const tvLink = `https://www.tradingview.com/chart/?symbol=NSE:${stock.nsecode}`;
 
+                let strategyBadgesHTML = '';
+                if (isSuperTab && stock.matched_strategies) {
+                    strategyBadgesHTML = `<td>${stock.matched_strategies.map(s => `<span class="badge badge-strategy">${s.replace(/_/g, ' ')}</span>`).join('')}</td>`;
+                }
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="fw-bold font-mono text-info">${stock.nsecode}</td>
@@ -630,6 +591,7 @@
                     <td class="fw-bold font-mono">₹${Number(stock.close).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
                     <td><span class="badge ${badgeClass} rounded-pill px-3 py-1.5">${sign}${stock.per_chg}%</span></td>
                     <td class="text-muted font-mono">${Number(stock.volume).toLocaleString('en-IN')}</td>
+                    ${isSuperTab ? strategyBadgesHTML : ''}
                     <td class="text-end">
                         <a href="${tvLink}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 py-1 fw-semibold">
                             <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Chart
@@ -640,136 +602,30 @@
             });
         }
 
-       function renderCharts() {
+        function renderCharts() {
             const topGainers = [...activeDisplayedData].sort((a,b) => b.per_chg - a.per_chg).slice(0, 5);
             const topVolume = [...activeDisplayedData].sort((a,b) => b.volume - a.volume).slice(0, 5);
             const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-
             const textMutedColor = isDark ? '#94a3b8' : '#64748b';
-            const gridBorderColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
 
-            // Modern Top Gainers Chart Config
             const gainersOptions = {
-                chart: { 
-                    type: 'bar', 
-                    height: 300, 
-                    toolbar: { show: false }, 
-                    background: 'transparent',
-                    fontFamily: 'Plus Jakarta Sans, sans-serif'
-                },
+                chart: { type: 'bar', height: 300, toolbar: { show: false }, background: 'transparent', fontFamily: 'Plus Jakarta Sans, sans-serif' },
                 theme: { mode: isDark ? 'dark' : 'light' },
                 series: [{ name: '% Change', data: topGainers.map(s => parseFloat(s.per_chg)) }],
-                xaxis: { 
-                    categories: topGainers.map(s => s.nsecode),
-                    axisBorder: { show: false },
-                    axisTicks: { show: false },
-                    labels: { 
-                        style: { 
-                            fontFamily: 'JetBrains Mono',
-                            fontWeight: 600,
-                            colors: textMutedColor
-                        } 
-                    }
-                },
-                yaxis: {
-                    labels: {
-                        style: { fontFamily: 'JetBrains Mono', colors: textMutedColor },
-                        formatter: val => `${val}%`
-                    }
-                },
-                grid: {
-                    borderColor: gridBorderColor,
-                    strokeDashArray: 4,
-                    yaxis: { lines: { show: true } }
-                },
+                xaxis: { categories: topGainers.map(s => s.nsecode), labels: { style: { fontFamily: 'JetBrains Mono', colors: textMutedColor } } },
                 colors: ['#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7'],
-                plotOptions: { 
-                    bar: { 
-                        borderRadius: 8, 
-                        borderRadiusApplication: 'end',
-                        columnWidth: '40%', 
-                        distributed: true 
-                    } 
-                },
-                legend: { show: false }, // Removes duplicate bottom legend
-                dataLabels: { 
-                    enabled: true, 
-                    offsetY: -22,
-                    formatter: val => `${val}%`,
-                    style: { 
-                        fontFamily: 'JetBrains Mono', 
-                        fontWeight: '700',
-                        fontSize: '12px',
-                        colors: [isDark ? '#f8fafc' : '#0f172a'] 
-                    }
-                },
-                tooltip: {
-                    theme: isDark ? 'dark' : 'light',
-                    y: { formatter: val => `${val}% Growth` }
-                }
+                plotOptions: { bar: { borderRadius: 6, columnWidth: '40%', distributed: true } },
+                legend: { show: false },
+                dataLabels: { enabled: true, formatter: val => `${val}%` }
             };
 
-            // Modern Volume Donut Gauge Config
-            const totalVolumeSum = topVolume.reduce((acc, curr) => acc + Number(curr.volume), 0);
-            
             const volumeOptions = {
-                chart: { 
-                    type: 'donut', 
-                    height: 350, 
-                    background: 'transparent',
-                    fontFamily: 'Plus Jakarta Sans, sans-serif'
-                },
+                chart: { type: 'donut', height: 300, background: 'transparent', fontFamily: 'Plus Jakarta Sans, sans-serif' },
                 theme: { mode: isDark ? 'dark' : 'light' },
                 series: topVolume.map(s => Number(s.volume)),
                 labels: topVolume.map(s => s.nsecode),
                 colors: ['#06b6d4', '#10b981', '#f59e0b', '#818cf8', '#f43f5e'],
-                stroke: {
-                    show: true,
-                    width: 3,
-                    colors: [isDark ? '#0d121e' : '#ffffff']
-                },
-                plotOptions: {
-                    pie: {
-                        donut: { 
-                            size: '72%',
-                            labels: {
-                                show: true,
-                                name: {
-                                    show: true,
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontWeight: 600,
-                                    color: textMutedColor,
-                                    offsetY: -5
-                                },
-                                value: {
-                                    show: true,
-                                    fontFamily: 'JetBrains Mono',
-                                    fontWeight: 700,
-                                    color: isDark ? '#f8fafc' : '#0f172a',
-                                    offsetY: 5,
-                                    formatter: val => Number(val).toLocaleString('en-IN')
-                                },
-                                total: {
-                                    show: true,
-                                    label: 'Top 5 Vol',
-                                    color: textMutedColor,
-                                    formatter: () => Number(totalVolumeSum).toLocaleString('en-IN')
-                                }
-                            }
-                        }
-                    }
-                },
-                dataLabels: { enabled: false },
-                legend: { 
-                    position: 'bottom', 
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: 600,
-                    labels: { colors: textMutedColor }
-                },
-                tooltip: {
-                    theme: isDark ? 'dark' : 'light',
-                    y: { formatter: val => `${Number(val).toLocaleString('en-IN')} shares` }
-                }
+                legend: { position: 'bottom', labels: { colors: textMutedColor } }
             };
 
             if (gainersChart) gainersChart.destroy();
@@ -793,22 +649,27 @@
 
                 rawData = resData.results;
 
-                const currentTabCodes = new Set((rawData[currentTab] || []).map(s => s.nsecode));
-                let hasNewStock = false;
+                const newIntradayCount = rawData.intraday.length;
+                const newSuperCount = (rawData.super_probability || []).length;
 
-                currentTabCodes.forEach(code => {
-                    if (!previousCodes.has(code)) hasNewStock = true;
-                });
-
-                if (hasNewStock && previousCodes.size > 0 && document.getElementById('soundToggle').checked) {
-                    playAudioTone(document.getElementById('soundSelect').value, document.getElementById('volumeSlider').value);
+                if (previousStockCounts.standard !== 0 && newIntradayCount > previousStockCounts.standard) {
+                    playAlertSound('standard');
+                }
+                if (previousStockCounts.super !== 0 && newSuperCount > previousStockCounts.super) {
+                    playAlertSound('vip');
                 }
 
-                previousCodes = currentTabCodes;
+                previousStockCounts.standard = newIntradayCount;
+                previousStockCounts.super = newSuperCount;
 
                 document.getElementById('count-intraday').innerText = rawData.intraday.length;
                 document.getElementById('count-monthly').innerText = rawData.monthly.length;
                 document.getElementById('count-best').innerText = rawData.best_setup.length;
+                document.getElementById('count-strong-vol').innerText = rawData.strong_vol_hh.length;
+                document.getElementById('count-liq-hunt').innerText = rawData.liquidity_hunt.length;
+                document.getElementById('count-near-trendline').innerText = (rawData.near_trendline || []).length;
+                document.getElementById('count-market-momentum').innerText = (rawData.market_momentum || []).length;
+                document.getElementById('count-super-prob').innerText = (rawData.super_probability || []).length;
                 document.getElementById('last-updated-time').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
 
                 filterData();
