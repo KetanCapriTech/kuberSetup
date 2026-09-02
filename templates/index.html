@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chartink Scanner Terminal</title>
+    <title>Advanced Chartink Dashboard Terminal</title>
     
-    <!-- Bootstrap 5 CSS & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <!-- Google Fonts & ApexCharts -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
@@ -18,58 +16,51 @@
             --bg-body-dark: #090d16;
             --card-bg-dark: #111827;
             --card-border-dark: #1f2937;
+            --text-main: #f3f4f6;
+            --text-sub: #9ca3af;
             --accent-cyan: #06b6d4;
             --accent-green: #10b981;
             --accent-red: #ef4444;
-            --accent-amber: #f59e0b;
+        }
+
+        [data-bs-theme="light"] {
+            --bg-body-dark: #f8fafc;
+            --card-bg-dark: #ffffff;
+            --card-border-dark: #e2e8f0;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-body-dark);
-            color: #f3f4f6;
+            color: var(--text-main);
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
 
         .glass-card {
             background-color: var(--card-bg-dark);
             border: 1px solid var(--card-border-dark);
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        /* Scrollable Tab Navigation Bar to prevent overflow off-screen */
         .nav-tabs-scroll {
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
             white-space: nowrap;
             padding-bottom: 5px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .nav-tabs-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-        .nav-tabs-scroll::-webkit-scrollbar-thumb {
-            background: var(--card-border-dark);
-            border-radius: 4px;
         }
 
         .nav-pills .nav-link {
-            color: #9ca3af;
+            color: var(--text-sub);
             font-weight: 600;
             border-radius: 8px;
             padding: 8px 16px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-pills .nav-link:hover {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .nav-pills .nav-link.active {
@@ -89,28 +80,58 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        .badge-strategy {
-            background-color: rgba(6, 182, 212, 0.15);
-            color: var(--accent-cyan);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            font-size: 0.75rem;
-            margin-right: 4px;
-            margin-bottom: 2px;
-            display: inline-block;
+        .badge-new-hit {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            animation: pulse-new 2s infinite;
+        }
+
+        .table-row-new {
+            background-color: rgba(16, 185, 129, 0.08) !important;
+            border-left: 4px solid #10b981 !important;
+        }
+
+        .table-row-selected {
+            background-color: rgba(6, 182, 212, 0.15) !important;
+        }
+
+        @keyframes pulse-new {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .new-hits-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .new-hit-card {
+            min-width: 220px;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 12px;
         }
 
         .table-custom {
             --bs-table-bg: transparent;
-            --bs-table-color: #f3f4f6;
+            --bs-table-color: var(--text-main);
         }
 
         .table-custom th {
             border-bottom: 2px solid var(--card-border-dark);
-            color: #9ca3af;
+            color: var(--text-sub);
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.75rem;
-            letter-spacing: 0.05em;
             cursor: pointer;
         }
 
@@ -120,47 +141,121 @@
         }
 
         .form-select-custom, .form-control-custom {
-            background-color: #1f2937;
-            border: 1px solid #374151;
-            color: #f3f4f6;
+            background-color: var(--card-bg-dark);
+            border: 1px solid var(--card-border-dark);
+            color: var(--text-main);
             border-radius: 8px;
         }
 
-        .form-select-custom:focus, .form-control-custom:focus {
-            background-color: #1f2937;
-            border-color: var(--accent-cyan);
-            color: #f3f4f6;
-            box-shadow: 0 0 0 0.25rem rgba(6, 182, 212, 0.25);
+        .strategy-badge {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: rgba(6, 182, 212, 0.2);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            margin-right: 3px;
+            display: inline-block;
+            margin-top: 2px;
         }
     </style>
 </head>
 <body class="p-3 p-md-4">
 
     <div class="container-fluid">
-        <!-- Top Navigation Header -->
+        <!-- Top Header -->
         <header class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary border-opacity-25">
             <div class="d-flex align-items-center mb-2 mb-md-0">
                 <i class="fa-solid fa-chart-line text-info fs-3 me-3"></i>
                 <div>
-                    <h4 class="fw-extrabold m-0 text-light">Chartink Terminal</h4>
+                    <h4 class="fw-extrabold m-0">Kuber's Setup</h4>
                     <span class="badge bg-secondary opacity-75 font-mono small" id="last-updated-time">Sync: Initializing...</span>
                 </div>
             </div>
 
-            <div class="d-flex gap-2 align-items-center">
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <!-- Volume Quick Control Slider -->
+                <div class="d-flex align-items-center bg-dark border border-secondary px-2 py-1 rounded-3 me-1">
+                    <i class="fa-solid fa-volume-high text-info me-2 small"></i>
+                    <input type="range" class="form-range" id="headerVolumeSlider" min="0" max="100" value="80" style="width: 80px;" oninput="updateVolumeFromSlider(this.value)">
+                    <span class="ms-2 font-mono small" id="volume-val-display">80%</span>
+                </div>
+
+                <button class="btn btn-outline-info btn-sm px-3 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#soundSettingsModal">
+                    <i class="fa-solid fa-sliders me-1"></i> Audio Settings
+                </button>
+
+                <button id="sound-btn" onclick="toggleAudioAlerts()" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3" title="Audio Alert Toggle">
+                    <i class="fa-solid fa-bell me-1" id="sound-icon"></i> Sound: ON
+                </button>
+
+                <button id="theme-btn" onclick="toggleTheme()" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3">
+                    <i class="fa-solid fa-moon me-1" id="theme-icon"></i> Dark Mode
+                </button>
+
                 <button id="toggle-scan-btn" onclick="toggleScanner()" class="btn btn-warning btn-sm fw-bold px-3 py-2 rounded-3">
                     <i class="fa-solid fa-pause me-1"></i> Pause
                 </button>
-                <button onclick="toggleTheme()" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3">
-                    <i class="fa-solid fa-circle-half-stroke"></i>
-                </button>
-                <button class="btn btn-outline-info btn-sm px-3 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#soundModal">
-                    <i class="fa-solid fa-sliders"></i>
+                <button onclick="clearStockCache()" class="btn btn-outline-danger btn-sm px-3 py-2 rounded-3">
+                    <i class="fa-solid fa-trash-can me-1"></i> Reset
                 </button>
             </div>
         </header>
 
-        <!-- Strategy Tabs Navigation (Scrollable container added) -->
+        <!-- Dynamic Charts Grid Section -->
+        <div class="row g-3 mb-4">
+            <div class="col-lg-4">
+                <div class="glass-card p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold mb-0">
+                            <i class="fa-solid fa-chart-column text-info me-2"></i>Sector Advances %
+                        </h6>
+                        <span class="text-muted small">Vertical View</span>
+                    </div>
+                    <div id="verticalSectorChart" style="min-height: 300px;"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="glass-card p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold mb-0">
+                            <i class="fa-solid fa-chart-pie text-warning me-2"></i>Strategy Distribution
+                        </h6>
+                        <span class="text-muted small">Live Overview</span>
+                    </div>
+                    <div id="strategyPieChart" style="min-height: 300px;"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="glass-card p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold mb-0" id="tab-pie-title">
+                            <i class="fa-solid fa-pie-chart text-success me-2"></i>Active Tab Stocks Breakdown
+                        </h6>
+                        <span class="text-muted small">Current Selection</span>
+                    </div>
+                    <div id="tabStocksPieChart" style="min-height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Stock Hits Section (< 5 Mins) -->
+        <div class="glass-card p-3 mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <h6 class="fw-bold text-success mb-0 d-flex align-items-center">
+                    <i class="fa-solid fa-bolt-lightning me-2"></i> New Hits (< 5 Mins)
+                    <span class="badge bg-success ms-2 font-mono" id="new-hits-count">0</span>
+                </h6>
+                <span class="text-muted small">Tracked via Browser Storage</span>
+            </div>
+            <div class="new-hits-container" id="new-hits-wrapper">
+                <div class="text-muted small py-2">No new stock triggers detected in the last 5 minutes.</div>
+            </div>
+        </div>
+
+        <!-- Strategy Tabs Navigation -->
         <ul class="nav nav-pills nav-tabs-scroll gap-2 mb-4" id="scannerTabs">
             <li class="nav-item">
                 <button class="nav-link active" onclick="switchTab('intraday', this)">
@@ -198,275 +293,753 @@
                 </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link text-warning" onclick="switchTab('super_probability', this)">
+                <button class="nav-link text-success fw-bold" onclick="switchTab('bull_call_confirmed', this)">
+                    <i class="fa-solid fa-circle-check me-1"></i> Bull Call Confirmed <span class="badge bg-dark ms-1" id="count-bull-call">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link text-warning fw-bold" onclick="switchTab('super_probability', this)">
                     <i class="fa-solid fa-bolt me-1"></i> Super Prob <span class="badge bg-dark ms-1" id="count-super-prob">0</span>
                 </button>
             </li>
         </ul>
 
-        <!-- Strategy Checkbox Controls (Visible only on Super Probability Tab) -->
-        <div class="glass-card p-3 mb-4" id="super-prob-filters" style="display: none;">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <label class="form-label text-warning small fw-bold text-uppercase mb-0">
-                    <i class="fa-solid fa-filter me-1"></i> Filter Super Probability Setups (Must Match Selected)
-                </label>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-info btn-sm py-0 px-2" style="font-size: 0.75rem;" onclick="selectAllSuperCheckboxes(true)">Select All</button>
-                    <button class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size: 0.75rem;" onclick="selectAllSuperCheckboxes(false)">Clear All</button>
-                </div>
-            </div>
-            <div class="d-flex flex-wrap gap-3 pt-1">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_intraday" value="intraday" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_intraday">Intraday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_monthly" value="monthly" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_monthly">Monthly</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_best_setup" value="best_setup" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_best_setup">Best Setup</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_strong_vol_hh" value="strong_vol_hh" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_strong_vol_hh">Strong Vol HH</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_liquidity_hunt" value="liquidity_hunt" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_liquidity_hunt">Liquidity Hunt</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_near_trendline" value="near_trendline" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_near_trendline">Near Trendline</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input super-filter-chk" type="checkbox" id="chk_market_momentum" value="market_momentum" onchange="filterData()" checked>
-                    <label class="form-check-label text-light small fw-semibold" for="chk_market_momentum">Market Momentum</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Dashboard Row -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-6">
-                <div class="glass-card p-3">
-                    <h6 class="fw-bold text-muted mb-2"><i class="fa-solid fa-chart-bar text-info me-2"></i>Top Gainers (% Chg)</h6>
-                    <div id="gainers-chart"></div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="glass-card p-3">
-                    <h6 class="fw-bold text-muted mb-2"><i class="fa-solid fa-chart-pie text-success me-2"></i>Volume Distribution</h6>
-                    <div id="volume-chart"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filter Tools Bar -->
+        <!-- Filter Tools & Selected Stocks Action Bar -->
         <div class="glass-card p-3 mb-4">
             <div class="row g-2 align-items-center">
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-secondary border-opacity-25 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="searchInput" onkeyup="filterData()" class="form-control form-control-custom" placeholder="Search by stock or name...">
-                    </div>
+                <div class="col-md-3">
+                    <input type="text" id="searchInput" onkeyup="filterData()" class="form-control form-control-custom" placeholder="Search symbol...">
                 </div>
                 <div class="col-md-3">
                     <select id="changeFilter" onchange="filterData()" class="form-select form-select-custom">
-                        <option value="all">All % Changes</option>
+                        <option value="all">All Stocks</option>
+                        <option value="new_only">⚡ New Hits Only (< 5 Mins)</option>
+                        <option value="selected_only">☑ Checked / Selected Stocks Only</option>
                         <option value="gainers">Positive Gainers (> 0%)</option>
-                        <option value="top_gainers">Top Gainers (> 3%)</option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <input type="number" id="priceFilter" onkeyup="filterData()" class="form-control form-control-custom" placeholder="Min Price (₹)">
+
+                <div class="col-md-6 text-md-end">
+                    <span class="me-2 small text-muted"><strong id="selected-count">0</strong> Stocks Selected</span>
+                    <button class="btn btn-sm btn-info fw-bold me-1" onclick="filterBySelectedOnly()">
+                        <i class="fa-solid fa-filter me-1"></i> Filter Checked
+                    </button>
+                    <button class="btn btn-sm btn-outline-info me-1" onclick="openSelectedCharts()">
+                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Open Charts
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="clearSelections()">
+                        Clear
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Results Table -->
+        <!-- Stocks Table -->
         <div class="glass-card p-3">
             <div class="table-responsive">
                 <table class="table table-custom align-middle">
                     <thead>
-                        <tr>
+                        <tr id="table-header-row">
+                            <th style="width: 40px;">
+                                <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" class="form-check-input" title="Select All in Current View">
+                            </th>
                             <th onclick="sortTable('nsecode')">Symbol <i class="fa-solid fa-sort ms-1"></i></th>
                             <th onclick="sortTable('name')">Name <i class="fa-solid fa-sort ms-1"></i></th>
+                            <th>Present In Tabs <i class="fa-solid fa-layer-group ms-1"></i></th>
                             <th onclick="sortTable('close')">Price <i class="fa-solid fa-sort ms-1"></i></th>
                             <th onclick="sortTable('per_chg')">% Change <i class="fa-solid fa-sort ms-1"></i></th>
                             <th onclick="sortTable('volume')">Volume <i class="fa-solid fa-sort ms-1"></i></th>
-                            <th id="th-matched-strategies" style="display: none;">Matched Strategies</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Dynamic Stock Content -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Audio Settings Modal -->
-    <div class="modal fade" id="soundModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card border">
-                <div class="modal-header border-bottom border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-sliders text-info me-2"></i>Audio Alert Settings</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- Multi-Tone Audio Settings Modal -->
+<div class="modal fade" id="soundSettingsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-volume-high text-info me-2"></i>Siren & Alert Controls</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4 p-3 bg-dark border border-secondary rounded-3">
+                    <label class="form-label fw-bold small text-info d-flex justify-content-between">
+                        <span><i class="fa-solid fa-volume-high me-1"></i> Master Siren Volume</span>
+                        <span id="modal-volume-display" class="font-mono">80%</span>
+                    </label>
+                    <input type="range" class="form-range" id="modalVolumeSlider" min="0" max="100" value="80" oninput="updateVolumeFromSlider(this.value)">
                 </div>
-                <div class="modal-body py-4">
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="soundToggle" checked>
-                        <label class="form-check-label fw-semibold" for="soundToggle">Standard Alert Tone</label>
-                    </div>
 
-                    <div class="form-check form-switch mb-4">
-                        <input class="form-check-input" type="checkbox" id="vipSoundToggle" checked>
-                        <label class="form-check-label fw-semibold text-warning" for="vipSoundToggle"><i class="fa-solid fa-crown me-1"></i> Best Setup Alert Tone</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Standard Tone Style</label>
-                        <select id="soundSelect" class="form-select form-select-custom" onchange="playAlertSound('standard')">
-                            <option value="chime">Modern Chime</option>
-                            <option value="radar">Sonar Radar</option>
-                            <option value="bell">Digital Bell</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Volume</label>
-                        <input type="range" class="form-range" id="volumeSlider" min="0" max="1" step="0.1" value="0.7">
-                    </div>
-
-                    <div class="d-flex gap-2 pt-2 border-top border-secondary border-opacity-25">
-                        <button type="button" class="btn btn-outline-info btn-sm w-100 fw-bold" onclick="playAlertSound('standard')">
-                            <i class="fa-solid fa-play me-1"></i> Test Standard
-                        </button>
-                        <button type="button" class="btn btn-outline-warning btn-sm w-100 fw-bold" onclick="playAlertSound('vip')">
-                            <i class="fa-solid fa-play me-1"></i> Test VIP Setup
-                        </button>
-                    </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-info text-start" onclick="playStrategySound('best_setup')">
+                        <i class="fa-solid fa-play me-2"></i> Test "Best Setup" Dual Alarm
+                    </button>
+                    <button class="btn btn-outline-info text-start" onclick="playStrategySound('bull_call_confirmed')">
+                        <i class="fa-solid fa-play me-2"></i> Test "Bull Call" Rising Pitch Sweep
+                    </button>
+                    <button class="btn btn-outline-info text-start" onclick="playStrategySound('super_probability')">
+                        <i class="fa-solid fa-play me-2"></i> Test "Super Prob" Emergency Siren
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Bootstrap & Main Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        const STORAGE_KEY = "chartink_stock_timestamps";
+        const THEME_KEY = "terminal_theme_mode";
+        const AUDIO_KEY = "terminal_audio_alert";
+        const TONES_KEY = "terminal_strategy_tones";
+        const VOLUME_KEY = "terminal_alert_volume";
+        const NEW_THRESHOLD_MS = 5 * 60 * 1000;
+
         let currentTab = 'intraday';
-        let rawData = { intraday: [], monthly: [], best_setup: [], strong_vol_hh: [], liquidity_hunt: [], near_trendline: [], market_momentum: [], super_probability: [] };
+        let rawData = {
+            intraday: [], monthly: [], best_setup: [], strong_vol_hh: [], 
+            liquidity_hunt: [], near_trendline: [], market_momentum: [], 
+            bull_call_confirmed: [], super_probability: []
+        };
         let activeDisplayedData = [];
+        let selectedStocks = new Set();
         let sortDirection = false;
         let isScannerPaused = false;
-        let gainersChart, volumeChart;
 
-        let previousStockCounts = { standard: 0, super: 0 };
-        let audioCtx = null;
+        let verticalSectorChart = null;
+        let strategyPieChart = null;
+        let tabStocksPieChart = null;
+        
+        let audioEnabled = true;
+        let audioVolume = 0.8;
 
-        function initAudioContext() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-        document.addEventListener('click', initAudioContext, { once: true });
+        let strategyTones = {
+            best_setup: "2000",
+            bull_call_confirmed: "2500",
+            super_probability: "2800",
+            default: "1500"
+        };
 
-        function playAlertSound(type = 'standard') {
-            initAudioContext();
-            if (!audioCtx) return;
+        const chartColors = ['#38bdf8', '#f43f5e', '#4ade80', '#fbbf24', '#818cf8', '#e11d48', '#ca8a04', '#0d9488', '#dc2626'];
 
-            const isStandardEnabled = document.getElementById('soundToggle')?.checked;
-            const isVipEnabled = document.getElementById('vipSoundToggle')?.checked;
-            const soundType = document.getElementById('soundSelect')?.value || 'chime';
-            const volume = parseFloat(document.getElementById('volumeSlider')?.value || 0.7);
+      function playStrategySound(strategyName) {
+        if (!audioEnabled || audioVolume <= 0) return;
 
-            if (type === 'standard' && !isStandardEnabled) return;
-            if (type === 'vip' && !isVipEnabled) return;
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const now = ctx.currentTime;
+            
+            // Master gain tied to the volume slider (Amplified for loud output)
+            const masterGain = ctx.createGain();
+            masterGain.gain.setValueAtTime(audioVolume * 0.8, now);
+            masterGain.connect(ctx.destination);
 
-            const masterGain = audioCtx.createGain();
-            masterGain.gain.setValueAtTime(volume, audioCtx.currentTime);
-            masterGain.connect(audioCtx.destination);
-
-            const now = audioCtx.currentTime;
-
-            if (type === 'vip') {
-                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-
-                    gain.gain.setValueAtTime(0.3, now + idx * 0.08);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+            if (strategyName === 'super_probability') {
+                // High Emergency Pulsing Siren (3 Rapid Loud Bursts)
+                for (let i = 0; i < 3; i++) {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'sawtooth'; // Sawtooth wave for sharp cutting sound
+                    osc.frequency.setValueAtTime(2500, now + (i * 0.25));
+                    
+                    gain.gain.setValueAtTime(1.0, now + (i * 0.25));
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.25) + 0.2);
 
                     osc.connect(gain);
                     gain.connect(masterGain);
+                    
+                    osc.start(now + (i * 0.25));
+                    osc.stop(now + (i * 0.25) + 0.2);
+                }
+            } 
+            else if (strategyName === 'bull_call_confirmed') {
+                // Rising Frequency Pitch Sweep Siren (1200Hz to 2800Hz)
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
 
-                    osc.start(now + idx * 0.08);
-                    osc.stop(now + idx * 0.08 + 0.3);
-                });
-                return;
-            }
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(1200, now);
+                osc.frequency.exponentialRampToValueAtTime(2800, now + 0.6); // Rising sweep
 
-            if (soundType === 'radar') {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, now);
-                osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
-
-                gain.gain.setValueAtTime(0.5, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                gain.gain.setValueAtTime(0.9, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
 
                 osc.connect(gain);
                 gain.connect(masterGain);
+
                 osc.start(now);
-                osc.stop(now + 0.25);
+                osc.stop(now + 0.65);
+            } 
+            else if (strategyName === 'best_setup') {
+                // Alternating Dual High-Pitch Alarm Beep (2200Hz / 1800Hz)
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
 
-            } else if (soundType === 'bell') {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(1200, now);
+                osc.type = 'square'; // Square wave for standard loud alert feel
+                osc.frequency.setValueAtTime(2200, now);
+                osc.frequency.setValueAtTime(1800, now + 0.2);
+                osc.frequency.setValueAtTime(2200, now + 0.4);
 
-                gain.gain.setValueAtTime(0.6, now);
+                gain.gain.setValueAtTime(0.7, now);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
                 osc.connect(gain);
                 gain.connect(masterGain);
+
                 osc.start(now);
                 osc.stop(now + 0.6);
+            } 
+            else {
+                // Standard Default Loud Alert Beep
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
 
-            } else {
-                [587.33, 880].forEach((freq, idx) => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1500, now);
 
-                    gain.gain.setValueAtTime(0.4, now + idx * 0.12);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.35);
+                gain.gain.setValueAtTime(0.8, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
 
-                    osc.connect(gain);
-                    gain.connect(masterGain);
+                osc.connect(gain);
+                gain.connect(masterGain);
 
-                    osc.start(now + idx * 0.12);
-                    osc.stop(now + idx * 0.12 + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        } catch (e) {
+            console.log("Audio play error:", e);
+        }
+    }
+
+        function updateVolumeFromSlider(val) {
+            const numVal = parseInt(val, 10);
+            audioVolume = numVal / 100.0;
+            
+            document.getElementById('headerVolumeSlider').value = numVal;
+            document.getElementById('modalVolumeSlider').value = numVal;
+            document.getElementById('volume-val-display').innerText = `${numVal}%`;
+            document.getElementById('modal-volume-display').innerText = `${numVal}%`;
+            
+            localStorage.setItem(VOLUME_KEY, audioVolume.toString());
+        }
+
+        function testTone(strategyName) {
+            const select = document.getElementById(`tone-${strategyName}`);
+            if (select) {
+                strategyTones[strategyName] = select.value;
+                playStrategySound(strategyName);
+            }
+        }
+
+        function saveAudioSettings() {
+            ['best_setup', 'bull_call_confirmed', 'super_probability'].forEach(strat => {
+                const sel = document.getElementById(`tone-${strat}`);
+                if (sel) strategyTones[strat] = sel.value;
+            });
+            localStorage.setItem(TONES_KEY, JSON.stringify(strategyTones));
+        }
+
+        function loadAudioSettings() {
+            const savedTones = localStorage.getItem(TONES_KEY);
+            if (savedTones) {
+                try {
+                    strategyTones = { ...strategyTones, ...JSON.parse(savedTones) };
+                } catch(e){}
+            }
+
+            const savedVol = localStorage.getItem(VOLUME_KEY);
+            if (savedVol !== null) {
+                audioVolume = parseFloat(savedVol);
+                updateVolumeFromSlider(Math.round(audioVolume * 100));
+            }
+
+            ['best_setup', 'bull_call_confirmed', 'super_probability'].forEach(strat => {
+                const sel = document.getElementById(`tone-${strat}`);
+                if (sel && strategyTones[strat]) sel.value = strategyTones[strat];
+            });
+        }
+
+        function triggerDesktopNotification(stock, strategyName) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(`New Stock Hit: ${stock.nsecode}`, {
+                    body: `Price: ₹${stock.close} | Change: ${stock.per_chg}%\nStrategy: ${strategyName.replace(/_/g, ' ')}`,
+                    icon: 'https://chartink.com/favicon.ico'
                 });
             }
         }
 
+        if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+
+        function initTheme() {
+            const mode = localStorage.getItem(THEME_KEY) || 'dark';
+            document.documentElement.setAttribute('data-bs-theme', mode);
+            updateThemeButtonUI(mode);
+        }
+
         function toggleTheme() {
-            const htmlTag = document.documentElement;
-            const currentTheme = htmlTag.getAttribute('data-bs-theme');
-            htmlTag.setAttribute('data-bs-theme', currentTheme === 'dark' ? 'light' : 'dark');
-            renderCharts();
+            const currentMode = document.documentElement.getAttribute('data-bs-theme');
+            const newMode = currentMode === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newMode);
+            localStorage.setItem(THEME_KEY, newMode);
+            updateThemeButtonUI(newMode);
+            if (verticalSectorChart) verticalSectorChart.updateOptions({ theme: { mode: newMode } });
+            if (strategyPieChart) strategyPieChart.updateOptions({ theme: { mode: newMode } });
+            if (tabStocksPieChart) tabStocksPieChart.updateOptions({ theme: { mode: newMode } });
+        }
+
+        function updateThemeButtonUI(mode) {
+            const btn = document.getElementById('theme-btn');
+            if (mode === 'light') {
+                btn.innerHTML = '<i class="fa-solid fa-sun me-1"></i> Light Mode';
+                btn.className = 'btn btn-outline-dark btn-sm px-3 py-2 rounded-3';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-moon me-1"></i> Dark Mode';
+                btn.className = 'btn btn-outline-secondary btn-sm px-3 py-2 rounded-3';
+            }
+        }
+
+        function initAudio() {
+            const savedSetting = localStorage.getItem(AUDIO_KEY);
+            audioEnabled = savedSetting !== null ? JSON.parse(savedSetting) : true;
+            updateAudioButtonUI();
+            loadAudioSettings();
+        }
+
+        function toggleAudioAlerts() {
+            audioEnabled = !audioEnabled;
+            localStorage.setItem(AUDIO_KEY, JSON.stringify(audioEnabled));
+            updateAudioButtonUI();
+            if (audioEnabled) playStrategySound('default');
+        }
+
+        function updateAudioButtonUI() {
+            const btn = document.getElementById('sound-btn');
+            if (audioEnabled) {
+                btn.innerHTML = '<i class="fa-solid fa-bell me-1"></i> Sound: ON';
+                btn.className = 'btn btn-outline-success btn-sm px-3 py-2 rounded-3';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-bell-slash me-1"></i> Sound: OFF';
+                btn.className = 'btn btn-outline-secondary btn-sm px-3 py-2 rounded-3';
+            }
+        }
+
+        function getStockCache() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : {};
+        }
+
+        function saveStockCache(cache) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
+        }
+
+        function clearStockCache() {
+            if (confirm("Reset local cache? Stocks will re-trigger as newly added.")) {
+                localStorage.removeItem(STORAGE_KEY);
+                fetchScanData();
+            }
+        }
+
+        function processLocalStorageTimestamps(strategyName, stockList) {
+            const cache = getStockCache();
+            const now = Date.now();
+            let updated = false;
+            let newlyAddedCount = 0;
+
+            const processedList = stockList.map(stock => {
+                const symbol = stock.nsecode;
+                if (!symbol) return stock;
+
+                const cacheKey = `${strategyName}_${symbol}`;
+                if (!cache[cacheKey]) {
+                    cache[cacheKey] = now;
+                    updated = true;
+                    newlyAddedCount++;
+                    triggerDesktopNotification(stock, strategyName);
+                }
+
+                return { ...stock, first_seen_at: cache[cacheKey] };
+            });
+
+            if (newlyAddedCount > 0) playStrategySound(strategyName);
+            if (updated) saveStockCache(cache);
+            return processedList;
+        }
+
+        function isNewHit(timestamp) {
+            if (!timestamp) return false;
+            return (Date.now() - timestamp) < NEW_THRESHOLD_MS;
+        }
+
+        function getPresentTabsForStock(symbol) {
+            const presentIn = [];
+            Object.keys(rawData).forEach(stratKey => {
+                if (stratKey === 'super_probability') return;
+                const match = (rawData[stratKey] || []).some(s => s.nsecode === symbol);
+                if (match) {
+                    presentIn.push(stratKey);
+                }
+            });
+            return presentIn;
+        }
+
+        function switchTab(tabName, element) {
+            currentTab = tabName;
+            document.querySelectorAll('#scannerTabs .nav-link').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            const masterCheckbox = document.getElementById('selectAllCheckbox');
+            if (masterCheckbox) masterCheckbox.checked = false;
+
+            filterData();
+        }
+
+        function renderNewHitsSection() {
+            const wrapper = document.getElementById('new-hits-wrapper');
+            const newHits = [];
+
+            const activeList = rawData[currentTab] || [];
+            activeList.forEach(stock => {
+                if (isNewHit(stock.first_seen_at)) newHits.push(stock);
+            });
+
+            document.getElementById('new-hits-count').innerText = newHits.length;
+
+            if (newHits.length === 0) {
+                wrapper.innerHTML = `<div class="text-muted small py-2">No new stock triggers detected in the last 5 minutes under ${currentTab.replace(/_/g, ' ')}.</div>`;
+                return;
+            }
+
+            wrapper.innerHTML = newHits.map(stock => `
+                <div class="new-hit-card">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold font-mono text-info">${stock.nsecode}</span>
+                        <span class="badge badge-new-hit">NEW</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold font-mono small">₹${Number(stock.close).toFixed(2)}</span>
+                        <span class="badge ${stock.per_chg >= 0 ? 'badge-positive' : 'badge-negative'} font-mono">${stock.per_chg > 0 ? '+' : ''}${stock.per_chg}%</span>
+                    </div>
+                    <a href="https://www.tradingview.com/chart/?symbol=NSE:${stock.nsecode}" target="_blank" class="btn btn-sm btn-outline-info w-100 mt-2 py-0" style="font-size: 0.75rem;">Chart</a>
+                </div>
+            `).join('');
+        }
+
+        function filterData() {
+            let list = [...(rawData[currentTab] || [])];
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const changeFilter = document.getElementById('changeFilter').value;
+
+            if (searchTerm) list = list.filter(item => item.nsecode.toLowerCase().includes(searchTerm));
+            if (changeFilter === 'new_only') list = list.filter(item => isNewHit(item.first_seen_at));
+            else if (changeFilter === 'selected_only') list = list.filter(item => selectedStocks.has(item.nsecode));
+            else if (changeFilter === 'gainers') list = list.filter(item => item.per_chg > 0);
+
+            activeDisplayedData = list;
+            renderNewHitsSection();
+            renderTable(activeDisplayedData);
+            updateTabStocksPieChart(activeDisplayedData);
+            updateSelectionUI();
+        }
+
+        function filterBySelectedOnly() {
+            const filterDropdown = document.getElementById('changeFilter');
+            filterDropdown.value = 'selected_only';
+            filterData();
+        }
+
+        function toggleSelectStock(symbol) {
+            if (selectedStocks.has(symbol)) {
+                selectedStocks.delete(symbol);
+            } else {
+                selectedStocks.add(symbol);
+            }
+            renderTable(activeDisplayedData);
+            updateSelectionUI();
+        }
+
+        function toggleSelectAll(masterCheckbox) {
+            activeDisplayedData.forEach(stock => {
+                if (masterCheckbox.checked) {
+                    selectedStocks.add(stock.nsecode);
+                } else {
+                    selectedStocks.delete(stock.nsecode);
+                }
+            });
+            renderTable(activeDisplayedData);
+            updateSelectionUI();
+        }
+
+        function clearSelections() {
+            selectedStocks.clear();
+            const master = document.getElementById('selectAllCheckbox');
+            if (master) master.checked = false;
+            
+            const filterDropdown = document.getElementById('changeFilter');
+            if (filterDropdown.value === 'selected_only') {
+                filterDropdown.value = 'all';
+            }
+            
+            filterData();
+        }
+
+        function updateSelectionUI() {
+            const countSpan = document.getElementById('selected-count');
+            if (countSpan) countSpan.innerText = selectedStocks.size;
+        }
+
+        function openSelectedCharts() {
+            if (selectedStocks.size === 0) {
+                alert("Please select at least one stock using the checkboxes.");
+                return;
+            }
+            selectedStocks.forEach(symbol => {
+                window.open(`https://www.tradingview.com/chart/?symbol=NSE:${symbol}`, '_blank');
+            });
+        }
+
+        function sortTable(columnKey) {
+            sortDirection = !sortDirection;
+            activeDisplayedData.sort((a, b) => {
+                let valA = a[columnKey];
+                let valB = b[columnKey];
+                if (typeof valA === 'string') return sortDirection ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                return sortDirection ? valA - valB : valB - valA;
+            });
+            renderTable(activeDisplayedData);
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No stocks found matching the criteria.</td></tr>`;
+                return;
+            }
+
+            data.forEach(stock => {
+                const isPositive = stock.per_chg >= 0;
+                const badgeClass = isPositive ? 'badge-positive' : 'badge-negative';
+                const stockIsNew = isNewHit(stock.first_seen_at);
+                const isChecked = selectedStocks.has(stock.nsecode);
+                
+                const presentTabs = getPresentTabsForStock(stock.nsecode);
+                const tabsBadgesHTML = presentTabs.map(t => `<span class="strategy-badge">${t.replace(/_/g, ' ')}</span>`).join('');
+
+                const tr = document.createElement('tr');
+                let rowClasses = [];
+                if (stockIsNew) rowClasses.push('table-row-new');
+                if (isChecked) rowClasses.push('table-row-selected');
+                tr.className = rowClasses.join(' ');
+
+                tr.innerHTML = `
+                    <td>
+                        <input type="checkbox" class="form-check-input" ${isChecked ? 'checked' : ''} onchange="toggleSelectStock('${stock.nsecode}')">
+                    </td>
+                    <td class="fw-bold font-mono text-info">
+                        ${stock.nsecode}
+                        ${stockIsNew ? '<span class="badge badge-new-hit ms-1">NEW</span>' : ''}
+                    </td>
+                    <td class="fw-semibold">
+                        ${stock.name}
+                    </td>
+                    <td>
+                        ${tabsBadgesHTML}
+                    </td>
+                    <td class="fw-bold font-mono">₹${Number(stock.close).toFixed(2)}</td>
+                    <td><span class="badge ${badgeClass} rounded-pill px-3 py-1">${isPositive ? '+' : ''}${stock.per_chg}%</span></td>
+                    <td class="text-muted font-mono">${Number(stock.volume).toLocaleString('en-IN')}</td>
+                    <td class="text-end">
+                        <a href="https://www.tradingview.com/chart/?symbol=NSE:${stock.nsecode}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 py-1 fw-semibold">Chart</a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function initVerticalSectorChart(categories, seriesData) {
+            const currentMode = document.documentElement.getAttribute('data-bs-theme');
+            const options = {
+                series: [{ name: 'Advance %', data: seriesData }],
+                chart: { type: 'bar', height: 300, toolbar: { show: false }, background: 'transparent' },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        distributed: true,
+                        borderRadius: 4
+                    }
+                },
+                colors: chartColors,
+                dataLabels: {
+                    enabled: true,
+                    formatter: (val) => val.toFixed(1) + '%',
+                    style: { colors: ['#fff'], fontSize: '10px', fontFamily: 'JetBrains Mono' },
+                    offsetY: -20
+                },
+                xaxis: {
+                    categories: categories,
+                    labels: {
+                        rotate: -45,
+                        rotateAlways: true,
+                        style: { colors: '#9ca3af', fontFamily: 'JetBrains Mono', fontSize: '10px' }
+                    }
+                },
+                yaxis: { labels: { style: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a', fontWeight: 600 } } },
+                grid: { borderColor: currentMode === 'dark' ? '#1f2937' : '#e2e8f0', strokeDashArray: 3 },
+                legend: { show: false },
+                theme: { mode: currentMode }
+            };
+
+            if (verticalSectorChart) verticalSectorChart.destroy();
+            verticalSectorChart = new ApexCharts(document.querySelector("#verticalSectorChart"), options);
+            verticalSectorChart.render();
+        }
+
+        function initStrategyPieChart(labels, seriesData) {
+            const currentMode = document.documentElement.getAttribute('data-bs-theme');
+            const options = {
+                series: seriesData,
+                labels: labels,
+                chart: { type: 'donut', height: 300, background: 'transparent' },
+                colors: chartColors,
+                legend: {
+                    position: 'bottom',
+                    labels: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a' }
+                },
+                dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
+                stroke: { show: false },
+                theme: { mode: currentMode }
+            };
+
+            if (strategyPieChart) strategyPieChart.destroy();
+            strategyPieChart = new ApexCharts(document.querySelector("#strategyPieChart"), options);
+            strategyPieChart.render();
+        }
+
+        function updateStrategyPieChart() {
+            const labels = [
+                'Intraday', 'Monthly', 'Best Setup', 'Strong Vol HH', 
+                'Liquidity Hunt', 'Near Trendline', 'Market Momentum', 'Bull Call Confirmed'
+            ];
+            const seriesData = [
+                rawData.intraday.length,
+                rawData.monthly.length,
+                rawData.best_setup.length,
+                rawData.strong_vol_hh.length,
+                rawData.liquidity_hunt.length,
+                (rawData.near_trendline || []).length,
+                (rawData.market_momentum || []).length,
+                (rawData.bull_call_confirmed || []).length
+            ];
+
+            if (strategyPieChart) {
+                strategyPieChart.updateOptions({ labels: labels, series: seriesData });
+            } else {
+                initStrategyPieChart(labels, seriesData);
+            }
+        }
+
+        function updateTabStocksPieChart(dataList) {
+            const currentMode = document.documentElement.getAttribute('data-bs-theme');
+            
+            let megaGainers = 0;
+            let moderateGainers = 0;
+            let mildGainers = 0;
+            let losers = 0;
+
+            dataList.forEach(stock => {
+                const chg = parseFloat(stock.per_chg || 0);
+                if (chg > 5) megaGainers++;
+                else if (chg >= 2) moderateGainers++;
+                else if (chg >= 0) mildGainers++;
+                else losers++;
+            });
+
+            const labels = ['> +5% Gain', '+2% to +5%', '0% to +2%', 'Negative (<0%)'];
+            const series = [megaGainers, moderateGainers, mildGainers, losers];
+
+            document.getElementById('tab-pie-title').innerHTML = `
+                <i class="fa-solid fa-pie-chart text-success me-2"></i>${currentTab.replace(/_/g, ' ').toUpperCase()} Stocks Breakdown
+            `;
+
+            const options = {
+                series: series,
+                labels: labels,
+                chart: { type: 'pie', height: 300, background: 'transparent' },
+                colors: ['#10b981', '#06b6d4', '#3b82f6', '#ef4444'],
+                legend: {
+                    position: 'bottom',
+                    labels: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a' }
+                },
+                dataLabels: { enabled: true },
+                stroke: { show: false },
+                theme: { mode: currentMode }
+            };
+
+            if (tabStocksPieChart) {
+                tabStocksPieChart.updateOptions({ series: series, labels: labels });
+            } else {
+                tabStocksPieChart = new ApexCharts(document.querySelector("#tabStocksPieChart"), options);
+                tabStocksPieChart.render();
+            }
+        }
+
+        async function fetchSectorData() {
+            try {
+                const response = await fetch('/api/sector-advances');
+                const data = await response.json();
+                const categories = data.map(item => item.sector || item.nsecode || 'Unknown');
+                const seriesData = data.map(item => parseFloat(item.value ?? item.per_chg ?? 0));
+
+                if (verticalSectorChart) {
+                    verticalSectorChart.updateOptions({ xaxis: { categories: categories }, series: [{ data: seriesData }] });
+                } else {
+                    initVerticalSectorChart(categories, seriesData);
+                }
+            } catch (err) {
+                console.error("Sector fetch error:", err);
+            }
+        }
+
+        async function fetchScanData() {
+            if (isScannerPaused) return;
+
+            try {
+                const response = await fetch('/api/data');
+                const resData = await response.json();
+
+                if (resData.is_paused) return;
+
+                Object.keys(resData.results).forEach(strategy => {
+                    rawData[strategy] = processLocalStorageTimestamps(strategy, resData.results[strategy]);
+                });
+
+                document.getElementById('count-intraday').innerText = rawData.intraday.length;
+                document.getElementById('count-monthly').innerText = rawData.monthly.length;
+                document.getElementById('count-best').innerText = rawData.best_setup.length;
+                document.getElementById('count-strong-vol').innerText = rawData.strong_vol_hh.length;
+                document.getElementById('count-liq-hunt').innerText = rawData.liquidity_hunt.length;
+                document.getElementById('count-near-trendline').innerText = (rawData.near_trendline || []).length;
+                document.getElementById('count-market-momentum').innerText = (rawData.market_momentum || []).length;
+                document.getElementById('count-bull-call').innerText = (rawData.bull_call_confirmed || []).length;
+                document.getElementById('count-super-prob').innerText = (rawData.super_probability || []).length;
+                document.getElementById('last-updated-time').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
+
+                updateStrategyPieChart();
+                filterData();
+            } catch (err) {
+                console.error("Data Sync Error:", err);
+            }
         }
 
         async function toggleScanner() {
@@ -486,200 +1059,13 @@
             }
         }
 
-        function switchTab(tabName, element) {
-            currentTab = tabName;
-            document.querySelectorAll('#scannerTabs .nav-link').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-
-            const strategyHeader = document.getElementById('th-matched-strategies');
-            const superProbFilters = document.getElementById('super-prob-filters');
-
-            if (currentTab === 'super_probability') {
-                strategyHeader.style.display = 'table-cell';
-                superProbFilters.style.display = 'block';
-            } else {
-                strategyHeader.style.display = 'none';
-                superProbFilters.style.display = 'none';
-            }
-
-            filterData();
-        }
-
-        function selectAllSuperCheckboxes(status) {
-            document.querySelectorAll('.super-filter-chk').forEach(chk => chk.checked = status);
-            filterData();
-        }
-
-        function filterData() {
-            let list = [...(rawData[currentTab] || [])];
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const changeFilter = document.getElementById('changeFilter').value;
-            const minPrice = parseFloat(document.getElementById('priceFilter').value) || 0;
-
-            if (currentTab === 'super_probability') {
-                const selectedStrategies = Array.from(document.querySelectorAll('.super-filter-chk:checked'))
-                    .map(chk => chk.value);
-
-                list = list.filter(item => {
-                    if (!item.matched_strategies) return false;
-                    return selectedStrategies.every(strat => item.matched_strategies.includes(strat));
-                });
-            }
-
-            if (minPrice > 0) list = list.filter(item => Number(item.close) >= minPrice);
-            if (searchTerm) {
-                list = list.filter(item => 
-                    item.nsecode.toLowerCase().includes(searchTerm) || 
-                    item.name.toLowerCase().includes(searchTerm)
-                );
-            }
-
-            if (changeFilter === 'gainers') list = list.filter(item => item.per_chg > 0);
-            else if (changeFilter === 'top_gainers') list = list.filter(item => item.per_chg > 3.0);
-
-            activeDisplayedData = list;
-            renderTable(activeDisplayedData);
-            renderCharts();
-        }
-
-        function sortTable(columnKey) {
-            sortDirection = !sortDirection;
-            activeDisplayedData.sort((a, b) => {
-                let valA = a[columnKey];
-                let valB = b[columnKey];
-                if (typeof valA === 'string') {
-                    return sortDirection ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                }
-                return sortDirection ? valA - valB : valB - valA;
-            });
-            renderTable(activeDisplayedData);
-        }
-
-        function renderTable(data) {
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = '';
-
-            const isSuperTab = currentTab === 'super_probability';
-            const colSpanCount = isSuperTab ? 7 : 6;
-
-            if (data.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="${colSpanCount}" class="text-center py-5 text-muted">
-                            <i class="fa-solid fa-folder-open fs-3 mb-2 opacity-50"></i>
-                            <div>No stocks matched the active filters.</div>
-                        </td>
-                    </tr>`;
-                return;
-            }
-
-            data.forEach(stock => {
-                const isPositive = stock.per_chg >= 0;
-                const badgeClass = isPositive ? 'badge-positive' : 'badge-negative';
-                const sign = isPositive ? '+' : '';
-                const tvLink = `https://www.tradingview.com/chart/?symbol=NSE:${stock.nsecode}`;
-
-                let strategyBadgesHTML = '';
-                if (isSuperTab && stock.matched_strategies) {
-                    strategyBadgesHTML = `<td>${stock.matched_strategies.map(s => `<span class="badge badge-strategy">${s.replace(/_/g, ' ')}</span>`).join('')}</td>`;
-                }
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="fw-bold font-mono text-info">${stock.nsecode}</td>
-                    <td class="fw-semibold">${stock.name}</td>
-                    <td class="fw-bold font-mono">₹${Number(stock.close).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
-                    <td><span class="badge ${badgeClass} rounded-pill px-3 py-1.5">${sign}${stock.per_chg}%</span></td>
-                    <td class="text-muted font-mono">${Number(stock.volume).toLocaleString('en-IN')}</td>
-                    ${isSuperTab ? strategyBadgesHTML : ''}
-                    <td class="text-end">
-                        <a href="${tvLink}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 py-1 fw-semibold">
-                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Chart
-                        </a>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderCharts() {
-            const topGainers = [...activeDisplayedData].sort((a,b) => b.per_chg - a.per_chg).slice(0, 5);
-            const topVolume = [...activeDisplayedData].sort((a,b) => b.volume - a.volume).slice(0, 5);
-            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-            const textMutedColor = isDark ? '#94a3b8' : '#64748b';
-
-            const gainersOptions = {
-                chart: { type: 'bar', height: 300, toolbar: { show: false }, background: 'transparent', fontFamily: 'Plus Jakarta Sans, sans-serif' },
-                theme: { mode: isDark ? 'dark' : 'light' },
-                series: [{ name: '% Change', data: topGainers.map(s => parseFloat(s.per_chg)) }],
-                xaxis: { categories: topGainers.map(s => s.nsecode), labels: { style: { fontFamily: 'JetBrains Mono', colors: textMutedColor } } },
-                colors: ['#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7'],
-                plotOptions: { bar: { borderRadius: 6, columnWidth: '40%', distributed: true } },
-                legend: { show: false },
-                dataLabels: { enabled: true, formatter: val => `${val}%` }
-            };
-
-            const volumeOptions = {
-                chart: { type: 'donut', height: 300, background: 'transparent', fontFamily: 'Plus Jakarta Sans, sans-serif' },
-                theme: { mode: isDark ? 'dark' : 'light' },
-                series: topVolume.map(s => Number(s.volume)),
-                labels: topVolume.map(s => s.nsecode),
-                colors: ['#06b6d4', '#10b981', '#f59e0b', '#818cf8', '#f43f5e'],
-                legend: { position: 'bottom', labels: { colors: textMutedColor } }
-            };
-
-            if (gainersChart) gainersChart.destroy();
-            if (volumeChart) volumeChart.destroy();
-
-            gainersChart = new ApexCharts(document.querySelector("#gainers-chart"), gainersOptions);
-            volumeChart = new ApexCharts(document.querySelector("#volume-chart"), volumeOptions);
-            
-            gainersChart.render();
-            volumeChart.render();
-        }
-
-        async function fetchScanData() {
-            if (isScannerPaused) return;
-
-            try {
-                const response = await fetch('/api/data');
-                const resData = await response.json();
-
-                if (resData.is_paused) return;
-
-                rawData = resData.results;
-
-                const newIntradayCount = rawData.intraday.length;
-                const newSuperCount = (rawData.super_probability || []).length;
-
-                if (previousStockCounts.standard !== 0 && newIntradayCount > previousStockCounts.standard) {
-                    playAlertSound('standard');
-                }
-                if (previousStockCounts.super !== 0 && newSuperCount > previousStockCounts.super) {
-                    playAlertSound('vip');
-                }
-
-                previousStockCounts.standard = newIntradayCount;
-                previousStockCounts.super = newSuperCount;
-
-                document.getElementById('count-intraday').innerText = rawData.intraday.length;
-                document.getElementById('count-monthly').innerText = rawData.monthly.length;
-                document.getElementById('count-best').innerText = rawData.best_setup.length;
-                document.getElementById('count-strong-vol').innerText = rawData.strong_vol_hh.length;
-                document.getElementById('count-liq-hunt').innerText = rawData.liquidity_hunt.length;
-                document.getElementById('count-near-trendline').innerText = (rawData.near_trendline || []).length;
-                document.getElementById('count-market-momentum').innerText = (rawData.market_momentum || []).length;
-                document.getElementById('count-super-prob').innerText = (rawData.super_probability || []).length;
-                document.getElementById('last-updated-time').innerText = `Sync: ${new Date().toLocaleTimeString()}`;
-
-                filterData();
-            } catch (err) {
-                console.error("Fetch Error:", err);
-            }
-        }
-
-        setInterval(fetchScanData, 5000);
+        initTheme();
+        initAudio();
         fetchScanData();
+        fetchSectorData();
+
+        setInterval(fetchScanData, 2000);
+setInterval(fetchSectorData, 15000);
     </script>
 </body>
 </html>
