@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Chartink Dashboard Terminal</title>
+    <title>Kuber's Terminal</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
@@ -174,7 +173,6 @@
             </div>
 
             <div class="d-flex gap-2 align-items-center flex-wrap">
-                <!-- Volume Quick Control Slider -->
                 <div class="d-flex align-items-center bg-dark border border-secondary px-2 py-1 rounded-3 me-1">
                     <i class="fa-solid fa-volume-high text-info me-2 small"></i>
                     <input type="range" class="form-range" id="headerVolumeSlider" min="0" max="100" value="80" style="width: 80px;" oninput="updateVolumeFromSlider(this.value)">
@@ -185,7 +183,11 @@
                     <i class="fa-solid fa-sliders me-1"></i> Audio Settings
                 </button>
 
-                <button id="sound-btn" onclick="toggleAudioAlerts()" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3" title="Audio Alert Toggle">
+                <button class="btn btn-outline-warning btn-sm px-3 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#tabVisibilityModal">
+                    <i class="fa-solid fa-eye-slash me-1"></i> Manage Tabs
+                </button>
+
+                <button id="sound-btn" onclick="toggleAudioAlerts()" class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3">
                     <i class="fa-solid fa-bell me-1" id="sound-icon"></i> Sound: ON
                 </button>
 
@@ -257,47 +259,78 @@
 
         <!-- Strategy Tabs Navigation -->
         <ul class="nav nav-pills nav-tabs-scroll gap-2 mb-4" id="scannerTabs">
-            <li class="nav-item">
-                <button class="nav-link active" onclick="switchTab('intraday', this)">
+            <li class="nav-item" data-tab-id="institutional_rocket">
+                <button class="nav-link active text-danger fw-bold" onclick="switchTab('institutional_rocket', this)">
+                    <i class="fa-solid fa-rocket me-1"></i> Inst. Rocket <span class="badge bg-dark ms-1" id="count-rocket">0</span>
+                </button>
+            </li>
+            <li class="nav-item" data-tab-id="three_min_confirmation">
+                <button class="nav-link text-info fw-bold" onclick="switchTab('three_min_confirmation', this)">
+                    <i class="fa-solid fa-clock me-1"></i> 3 Min Clause <span class="badge bg-dark ms-1" id="count-three-min">0</span>
+                </button>
+            </li>
+            <li class="nav-item" data-tab-id="three_step_candle">
+                <button class="nav-link text-warning fw-bold" onclick="switchTab('three_step_candle', this)">
+                    <i class="fa-solid fa-bars-staggered me-1"></i> 3 Step Candle <span class="badge bg-dark ms-1" id="count-three-step">0</span>
+                </button>
+            </li>
+            <li class="nav-item" data-tab-id="liquidity_sweep_sell">
+                <button class="nav-link text-danger fw-bold" onclick="switchTab('liquidity_sweep_sell', this)">
+                    <i class="fa-solid fa-arrow-trend-down me-1"></i> Sweep Sell (9:20) <span class="badge bg-dark ms-1" id="count-sweep-sell">0</span>
+                </button>
+            </li>
+            <li class="nav-item" data-tab-id="liquidity_sweep_buy">
+                <button class="nav-link text-success fw-bold" onclick="switchTab('liquidity_sweep_buy', this)">
+                    <i class="fa-solid fa-arrow-trend-up me-1"></i> Sweep Buy Strong <span class="badge bg-dark ms-1" id="count-sweep-buy">0</span>
+                </button>
+            </li>
+            <!-- NEW TAB: 1H BEARISH SHOOTING STAR -->
+            <li class="nav-item" data-tab-id="shooting_star_bearish">
+                <button class="nav-link text-danger fw-bold" onclick="switchTab('shooting_star_bearish', this)">
+                    <i class="fa-solid fa-meteor me-1"></i> Shooting Star 44 EMA <span class="badge bg-dark ms-1" id="count-shooting-star">0</span>
+                </button>
+            </li>
+            <li class="nav-item" data-tab-id="intraday">
+                <button class="nav-link" onclick="switchTab('intraday', this)">
                     Intraday <span class="badge bg-dark ms-1" id="count-intraday">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="monthly">
                 <button class="nav-link" onclick="switchTab('monthly', this)">
                     Monthly <span class="badge bg-dark ms-1" id="count-monthly">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="best_setup">
                 <button class="nav-link" onclick="switchTab('best_setup', this)">
                     Best Setup <span class="badge bg-dark ms-1" id="count-best">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="strong_vol_hh">
                 <button class="nav-link" onclick="switchTab('strong_vol_hh', this)">
                     Strong Vol HH <span class="badge bg-dark ms-1" id="count-strong-vol">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="liquidity_hunt">
                 <button class="nav-link" onclick="switchTab('liquidity_hunt', this)">
                     Liquidity Hunt <span class="badge bg-dark ms-1" id="count-liq-hunt">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="near_trendline">
                 <button class="nav-link" onclick="switchTab('near_trendline', this)">
                     Near Trendline <span class="badge bg-dark ms-1" id="count-near-trendline">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="market_momentum">
                 <button class="nav-link" onclick="switchTab('market_momentum', this)">
                     Market Momentum <span class="badge bg-dark ms-1" id="count-market-momentum">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="bull_call_confirmed">
                 <button class="nav-link text-success fw-bold" onclick="switchTab('bull_call_confirmed', this)">
-                    <i class="fa-solid fa-circle-check me-1"></i> Bull Call Confirmed <span class="badge bg-dark ms-1" id="count-bull-call">0</span>
+                    <i class="fa-solid fa-circle-check me-1"></i> Bull Call <span class="badge bg-dark ms-1" id="count-bull-call">0</span>
                 </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" data-tab-id="super_probability">
                 <button class="nav-link text-warning fw-bold" onclick="switchTab('super_probability', this)">
                     <i class="fa-solid fa-bolt me-1"></i> Super Prob <span class="badge bg-dark ms-1" id="count-super-prob">0</span>
                 </button>
@@ -359,53 +392,77 @@
         </div>
     </div>
 
-    <!-- Multi-Tone Audio Settings Modal -->
-<div class="modal fade" id="soundSettingsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass-card border-secondary">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title fw-bold"><i class="fa-solid fa-volume-high text-info me-2"></i>Siren & Alert Controls</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-4 p-3 bg-dark border border-secondary rounded-3">
-                    <label class="form-label fw-bold small text-info d-flex justify-content-between">
-                        <span><i class="fa-solid fa-volume-high me-1"></i> Master Siren Volume</span>
-                        <span id="modal-volume-display" class="font-mono">80%</span>
-                    </label>
-                    <input type="range" class="form-range" id="modalVolumeSlider" min="0" max="100" value="80" oninput="updateVolumeFromSlider(this.value)">
+    <!-- Multi-Tone Audio & Per-Tab Sound Customization Modal -->
+    <div class="modal fade" id="soundSettingsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content glass-card border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-sliders text-info me-2"></i>Strategy Sound & Alert Customization</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    <div class="mb-4 p-3 bg-dark border border-secondary rounded-3">
+                        <label class="form-label fw-bold small text-info d-flex justify-content-between">
+                            <span><i class="fa-solid fa-volume-high me-1"></i> Master Alert Volume</span>
+                            <span id="modal-volume-display" class="font-mono">80%</span>
+                        </label>
+                        <input type="range" class="form-range" id="modalVolumeSlider" min="0" max="100" value="80" oninput="updateVolumeFromSlider(this.value)">
+                    </div>
 
-                <div class="d-grid gap-2">
-                    <button class="btn btn-outline-info text-start" onclick="playStrategySound('best_setup')">
-                        <i class="fa-solid fa-play me-2"></i> Test "Best Setup" Dual Alarm
-                    </button>
-                    <button class="btn btn-outline-info text-start" onclick="playStrategySound('bull_call_confirmed')">
-                        <i class="fa-solid fa-play me-2"></i> Test "Bull Call" Rising Pitch Sweep
-                    </button>
-                    <button class="btn btn-outline-info text-start" onclick="playStrategySound('super_probability')">
-                        <i class="fa-solid fa-play me-2"></i> Test "Super Prob" Emergency Siren
-                    </button>
+                    <h6 class="fw-bold text-light mb-3"><i class="fa-solid fa-music me-2 text-warning"></i>Assign Alert Tone & Mute Per Strategy Tab</h6>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped align-middle small">
+                            <thead>
+                                <tr>
+                                    <th>Strategy Tab</th>
+                                    <th>Sound Alert Enabled</th>
+                                    <th>Selected Alert Tone</th>
+                                    <th class="text-end">Test Sound</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tab-sound-config-body">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- TAB VISIBILITY CONTROL MODAL -->
+    <div class="modal fade" id="tabVisibilityModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-eye text-warning me-2"></i>Manage Visible Tabs</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">Uncheck any strategy tab below to hide it from your dashboard tabs bar.</p>
+                    <div id="tab-visibility-list" class="d-flex flex-column gap-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const STORAGE_KEY = "chartink_stock_timestamps";
         const THEME_KEY = "terminal_theme_mode";
         const AUDIO_KEY = "terminal_audio_alert";
-        const TONES_KEY = "terminal_strategy_tones";
+        const TONES_KEY = "terminal_strategy_tones_config";
+        const DISABLED_ALERTS_KEY = "terminal_disabled_strategy_alerts";
+        const VISIBLE_TABS_KEY = "terminal_visible_tabs_config";
         const VOLUME_KEY = "terminal_alert_volume";
         const NEW_THRESHOLD_MS = 5 * 60 * 1000;
 
-        let currentTab = 'intraday';
+        let currentTab = 'institutional_rocket';
         let rawData = {
-            intraday: [], monthly: [], best_setup: [], strong_vol_hh: [], 
-            liquidity_hunt: [], near_trendline: [], market_momentum: [], 
-            bull_call_confirmed: [], super_probability: []
+            institutional_rocket: [], three_min_confirmation: [], three_step_candle: [], liquidity_sweep_sell: [], liquidity_sweep_buy: [], shooting_star_bearish: [], intraday: [], monthly: [], 
+            best_setup: [], strong_vol_hh: [], liquidity_hunt: [], near_trendline: [], 
+            market_momentum: [], bull_call_confirmed: [], super_probability: []
         };
         let activeDisplayedData = [];
         let selectedStocks = new Set();
@@ -418,105 +475,228 @@
         
         let audioEnabled = true;
         let audioVolume = 0.8;
+        let disabledStrategyAlerts = {};
+        let visibleTabsConfig = {};
 
+        // Default Tone Mapping including Shooting Star
         let strategyTones = {
-            best_setup: "2000",
-            bull_call_confirmed: "2500",
-            super_probability: "2800",
-            default: "1500"
+            institutional_rocket: "rocket_siren",
+            three_min_confirmation: "fast_pulse",
+            three_step_candle: "fast_pulse",
+            liquidity_sweep_sell: "dual_alarm",
+            liquidity_sweep_buy: "pitch_sweep",
+            shooting_star_bearish: "emergency",
+            best_setup: "dual_alarm",
+            bull_call_confirmed: "pitch_sweep",
+            super_probability: "emergency",
+            intraday: "sonar_ping",
+            monthly: "soft_chime",
+            strong_vol_hh: "fast_pulse",
+            liquidity_hunt: "sonar_ping",
+            near_trendline: "soft_chime",
+            market_momentum: "pitch_sweep"
         };
 
-        const chartColors = ['#38bdf8', '#f43f5e', '#4ade80', '#fbbf24', '#818cf8', '#e11d48', '#ca8a04', '#0d9488', '#dc2626'];
+        const AVAILABLE_TONES = [
+            { id: 'rocket_siren', name: '🚀 Rocket Siren (High Triple Burst)' },
+            { id: 'fast_pulse', name: '⚡ Fast Staccato Pulse' },
+            { id: 'dual_alarm', name: '🚨 Dual-Frequency Alarm' },
+            { id: 'pitch_sweep', name: '📈 Rising Pitch Sweep' },
+            { id: 'emergency', name: '🔴 Emergency Triple Chirp' },
+            { id: 'sonar_ping', name: '📡 Sonar Ping (Medium Pitch)' },
+            { id: 'soft_chime', name: '🔔 Gentle Sine Chime' }
+        ];
 
-      function playStrategySound(strategyName) {
-        if (!audioEnabled || audioVolume <= 0) return;
+        function playSoundByToneId(toneId) {
+            if (!audioEnabled || audioVolume <= 0) return;
 
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const now = ctx.currentTime;
-            
-            // Master gain tied to the volume slider (Amplified for loud output)
-            const masterGain = ctx.createGain();
-            masterGain.gain.setValueAtTime(audioVolume * 0.8, now);
-            masterGain.connect(ctx.destination);
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = ctx.currentTime;
+                
+                const masterGain = ctx.createGain();
+                masterGain.gain.setValueAtTime(audioVolume * 0.8, now);
+                masterGain.connect(ctx.destination);
 
-            if (strategyName === 'super_probability') {
-                // High Emergency Pulsing Siren (3 Rapid Loud Bursts)
-                for (let i = 0; i < 3; i++) {
+                if (toneId === 'rocket_siren') {
+                    for (let i = 0; i < 4; i++) {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(3200, now + (i * 0.1));
+                        gain.gain.setValueAtTime(1.0, now + (i * 0.1));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.1) + 0.08);
+                        osc.connect(gain);
+                        gain.connect(masterGain);
+                        osc.start(now + (i * 0.1));
+                        osc.stop(now + (i * 0.1) + 0.08);
+                    }
+                }
+                else if (toneId === 'fast_pulse') {
+                    for (let i = 0; i < 2; i++) {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(2800, now + (i * 0.15));
+                        gain.gain.setValueAtTime(1.0, now + (i * 0.15));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.15) + 0.1);
+                        osc.connect(gain);
+                        gain.connect(masterGain);
+                        osc.start(now + (i * 0.15));
+                        osc.stop(now + (i * 0.15) + 0.1);
+                    }
+                }
+                else if (toneId === 'emergency') {
+                    for (let i = 0; i < 3; i++) {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'square';
+                        osc.frequency.setValueAtTime(2400, now + (i * 0.2));
+                        gain.gain.setValueAtTime(0.9, now + (i * 0.2));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.2) + 0.15);
+                        osc.connect(gain);
+                        gain.connect(masterGain);
+                        osc.start(now + (i * 0.2));
+                        osc.stop(now + (i * 0.2) + 0.15);
+                    }
+                } 
+                else if (toneId === 'pitch_sweep') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
-                    
-                    osc.type = 'sawtooth'; // Sawtooth wave for sharp cutting sound
-                    osc.frequency.setValueAtTime(2500, now + (i * 0.25));
-                    
-                    gain.gain.setValueAtTime(1.0, now + (i * 0.25));
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.25) + 0.2);
-
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(1000, now);
+                    osc.frequency.exponentialRampToValueAtTime(3000, now + 0.5);
+                    gain.gain.setValueAtTime(0.9, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
                     osc.connect(gain);
                     gain.connect(masterGain);
-                    
-                    osc.start(now + (i * 0.25));
-                    osc.stop(now + (i * 0.25) + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.55);
+                } 
+                else if (toneId === 'dual_alarm') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(2000, now);
+                    osc.frequency.setValueAtTime(1600, now + 0.2);
+                    osc.frequency.setValueAtTime(2000, now + 0.4);
+                    gain.gain.setValueAtTime(0.7, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(now);
+                    osc.stop(now + 0.55);
                 }
-            } 
-            else if (strategyName === 'bull_call_confirmed') {
-                // Rising Frequency Pitch Sweep Siren (1200Hz to 2800Hz)
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(1200, now);
-                osc.frequency.exponentialRampToValueAtTime(2800, now + 0.6); // Rising sweep
-
-                gain.gain.setValueAtTime(0.9, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-
-                osc.connect(gain);
-                gain.connect(masterGain);
-
-                osc.start(now);
-                osc.stop(now + 0.65);
-            } 
-            else if (strategyName === 'best_setup') {
-                // Alternating Dual High-Pitch Alarm Beep (2200Hz / 1800Hz)
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.type = 'square'; // Square wave for standard loud alert feel
-                osc.frequency.setValueAtTime(2200, now);
-                osc.frequency.setValueAtTime(1800, now + 0.2);
-                osc.frequency.setValueAtTime(2200, now + 0.4);
-
-                gain.gain.setValueAtTime(0.7, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-
-                osc.connect(gain);
-                gain.connect(masterGain);
-
-                osc.start(now);
-                osc.stop(now + 0.6);
-            } 
-            else {
-                // Standard Default Loud Alert Beep
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(1500, now);
-
-                gain.gain.setValueAtTime(0.8, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-
-                osc.connect(gain);
-                gain.connect(masterGain);
-
-                osc.start(now);
-                osc.stop(now + 0.4);
+                else if (toneId === 'sonar_ping') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1800, now);
+                    gain.gain.setValueAtTime(0.8, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                }
+                else {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1200, now);
+                    gain.gain.setValueAtTime(0.6, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                }
+            } catch (e) {
+                console.log("Audio error:", e);
             }
-        } catch (e) {
-            console.log("Audio play error:", e);
         }
-    }
+
+        function playStrategySound(strategyName) {
+            if (disabledStrategyAlerts[strategyName]) return;
+            const toneId = strategyTones[strategyName] || 'soft_chime';
+            playSoundByToneId(toneId);
+        }
+
+        function updateStrategyTone(strategyName, toneId) {
+            strategyTones[strategyName] = toneId;
+            localStorage.setItem(TONES_KEY, JSON.stringify(strategyTones));
+        }
+
+        function toggleTabAudioAlert(strategyName, isEnabled) {
+            disabledStrategyAlerts[strategyName] = !isEnabled;
+            localStorage.setItem(DISABLED_ALERTS_KEY, JSON.stringify(disabledStrategyAlerts));
+        }
+
+        function renderSoundConfigTable() {
+            const tbody = document.getElementById('tab-sound-config-body');
+            tbody.innerHTML = Object.keys(strategyTones).map(stratKey => {
+                const currentTone = strategyTones[stratKey];
+                const isAlertActive = !disabledStrategyAlerts[stratKey];
+                const toneOptionsHTML = AVAILABLE_TONES.map(t => 
+                    `<option value="${t.id}" ${t.id === currentTone ? 'selected' : ''}>${t.name}</option>`
+                ).join('');
+
+                return `
+                    <tr>
+                        <td class="fw-bold text-info">${stratKey.replace(/_/g, ' ').toUpperCase()}</td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" ${isAlertActive ? 'checked' : ''} onchange="toggleTabAudioAlert('${stratKey}', this.checked)">
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm bg-dark text-light border-secondary" onchange="updateStrategyTone('${stratKey}', this.value)">
+                                ${toneOptionsHTML}
+                            </select>
+                        </td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-info py-0 px-2" onclick="playSoundByToneId('${currentTone}')">
+                                <i class="fa-solid fa-play me-1"></i> Test
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderTabVisibilityControls() {
+            const container = document.getElementById('tab-visibility-list');
+            container.innerHTML = Object.keys(strategyTones).map(stratKey => {
+                const isVisible = visibleTabsConfig[stratKey] !== false;
+                return `
+                    <div class="d-flex justify-content-between align-items-center p-2 bg-dark rounded border border-secondary">
+                        <span class="fw-semibold text-light">${stratKey.replace(/_/g, ' ').toUpperCase()}</span>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" ${isVisible ? 'checked' : ''} onchange="toggleTabVisibility('${stratKey}', this.checked)">
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleTabVisibility(stratKey, isVisible) {
+            visibleTabsConfig[stratKey] = isVisible;
+            localStorage.setItem(VISIBLE_TABS_KEY, JSON.stringify(visibleTabsConfig));
+            applyTabVisibilityUI();
+        }
+
+        function applyTabVisibilityUI() {
+            Object.keys(strategyTones).forEach(stratKey => {
+                const tabLi = document.querySelector(`#scannerTabs li[data-tab-id="${stratKey}"]`);
+                if (tabLi) {
+                    if (visibleTabsConfig[stratKey] === false) {
+                        tabLi.style.display = 'none';
+                    } else {
+                        tabLi.style.display = '';
+                    }
+                }
+            });
+        }
 
         function updateVolumeFromSlider(val) {
             const numVal = parseInt(val, 10);
@@ -530,22 +710,6 @@
             localStorage.setItem(VOLUME_KEY, audioVolume.toString());
         }
 
-        function testTone(strategyName) {
-            const select = document.getElementById(`tone-${strategyName}`);
-            if (select) {
-                strategyTones[strategyName] = select.value;
-                playStrategySound(strategyName);
-            }
-        }
-
-        function saveAudioSettings() {
-            ['best_setup', 'bull_call_confirmed', 'super_probability'].forEach(strat => {
-                const sel = document.getElementById(`tone-${strat}`);
-                if (sel) strategyTones[strat] = sel.value;
-            });
-            localStorage.setItem(TONES_KEY, JSON.stringify(strategyTones));
-        }
-
         function loadAudioSettings() {
             const savedTones = localStorage.getItem(TONES_KEY);
             if (savedTones) {
@@ -554,19 +718,32 @@
                 } catch(e){}
             }
 
+            const savedDisabled = localStorage.getItem(DISABLED_ALERTS_KEY);
+            if (savedDisabled) {
+                try {
+                    disabledStrategyAlerts = JSON.parse(savedDisabled);
+                } catch(e){}
+            }
+
+            const savedVisible = localStorage.getItem(VISIBLE_TABS_KEY);
+            if (savedVisible) {
+                try {
+                    visibleTabsConfig = JSON.parse(savedVisible);
+                } catch(e){}
+            }
+
             const savedVol = localStorage.getItem(VOLUME_KEY);
             if (savedVol !== null) {
                 audioVolume = parseFloat(savedVol);
                 updateVolumeFromSlider(Math.round(audioVolume * 100));
             }
-
-            ['best_setup', 'bull_call_confirmed', 'super_probability'].forEach(strat => {
-                const sel = document.getElementById(`tone-${strat}`);
-                if (sel && strategyTones[strat]) sel.value = strategyTones[strat];
-            });
+            renderSoundConfigTable();
+            renderTabVisibilityControls();
+            applyTabVisibilityUI();
         }
 
         function triggerDesktopNotification(stock, strategyName) {
+            if (disabledStrategyAlerts[strategyName]) return;
             if ("Notification" in window && Notification.permission === "granted") {
                 new Notification(`New Stock Hit: ${stock.nsecode}`, {
                     body: `Price: ₹${stock.close} | Change: ${stock.per_chg}%\nStrategy: ${strategyName.replace(/_/g, ' ')}`,
@@ -618,7 +795,7 @@
             audioEnabled = !audioEnabled;
             localStorage.setItem(AUDIO_KEY, JSON.stringify(audioEnabled));
             updateAudioButtonUI();
-            if (audioEnabled) playStrategySound('default');
+            if (audioEnabled) playSoundByToneId('sonar_ping');
         }
 
         function updateAudioButtonUI() {
@@ -872,14 +1049,9 @@
                 series: [{ name: 'Advance %', data: seriesData }],
                 chart: { type: 'bar', height: 300, toolbar: { show: false }, background: 'transparent' },
                 plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '55%',
-                        distributed: true,
-                        borderRadius: 4
-                    }
+                    bar: { horizontal: false, columnWidth: '55%', distributed: true, borderRadius: 4 }
                 },
-                colors: chartColors,
+                colors: ['#06b6d4', '#38bdf8', '#f43f5e', '#4ade80', '#fbbf24', '#818cf8', '#e11d48', '#ca8a04', '#0d9488', '#dc2626'],
                 dataLabels: {
                     enabled: true,
                     formatter: (val) => val.toFixed(1) + '%',
@@ -888,11 +1060,7 @@
                 },
                 xaxis: {
                     categories: categories,
-                    labels: {
-                        rotate: -45,
-                        rotateAlways: true,
-                        style: { colors: '#9ca3af', fontFamily: 'JetBrains Mono', fontSize: '10px' }
-                    }
+                    labels: { rotate: -45, rotateAlways: true, style: { colors: '#9ca3af', fontFamily: 'JetBrains Mono', fontSize: '10px' } }
                 },
                 yaxis: { labels: { style: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a', fontWeight: 600 } } },
                 grid: { borderColor: currentMode === 'dark' ? '#1f2937' : '#e2e8f0', strokeDashArray: 3 },
@@ -911,11 +1079,8 @@
                 series: seriesData,
                 labels: labels,
                 chart: { type: 'donut', height: 300, background: 'transparent' },
-                colors: chartColors,
-                legend: {
-                    position: 'bottom',
-                    labels: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a' }
-                },
+                colors: ['#ef4444', '#06b6d4', '#eab308', '#dc2626', '#10b981', '#f43f5e', '#38bdf8', '#4ade80', '#fbbf24', '#818cf8', '#e11d48', '#ca8a04', '#0d9488'],
+                legend: { position: 'bottom', labels: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a' } },
                 dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
                 stroke: { show: false },
                 theme: { mode: currentMode }
@@ -928,10 +1093,16 @@
 
         function updateStrategyPieChart() {
             const labels = [
-                'Intraday', 'Monthly', 'Best Setup', 'Strong Vol HH', 
+                'Inst Rocket', '3 Min Clause', '3 Step Candle', 'Sweep Sell', 'Sweep Buy', 'Shooting Star', 'Intraday', 'Monthly', 'Best Setup', 'Strong Vol HH', 
                 'Liquidity Hunt', 'Near Trendline', 'Market Momentum', 'Bull Call Confirmed'
             ];
             const seriesData = [
+                (rawData.institutional_rocket || []).length,
+                (rawData.three_min_confirmation || []).length,
+                (rawData.three_step_candle || []).length,
+                (rawData.liquidity_sweep_sell || []).length,
+                (rawData.liquidity_sweep_buy || []).length,
+                (rawData.shooting_star_bearish || []).length,
                 rawData.intraday.length,
                 rawData.monthly.length,
                 rawData.best_setup.length,
@@ -969,7 +1140,7 @@
             const series = [megaGainers, moderateGainers, mildGainers, losers];
 
             document.getElementById('tab-pie-title').innerHTML = `
-                <i class="fa-solid fa-pie-chart text-success me-2"></i>${currentTab.replace(/_/g, ' ').toUpperCase()} Stocks Breakdown
+                <i class="fa-solid fa-pie-chart text-success me-2"></i>${currentTab.replace(/_/g, ' ').toUpperCase()} Breakdown
             `;
 
             const options = {
@@ -977,10 +1148,7 @@
                 labels: labels,
                 chart: { type: 'pie', height: 300, background: 'transparent' },
                 colors: ['#10b981', '#06b6d4', '#3b82f6', '#ef4444'],
-                legend: {
-                    position: 'bottom',
-                    labels: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a' }
-                },
+                legend: { position: 'bottom', labels: { colors: currentMode === 'dark' ? '#f3f4f6' : '#0f172a' } },
                 dataLabels: { enabled: true },
                 stroke: { show: false },
                 theme: { mode: currentMode }
@@ -1024,6 +1192,16 @@
                     rawData[strategy] = processLocalStorageTimestamps(strategy, resData.results[strategy]);
                 });
 
+                document.getElementById('count-rocket').innerText = (rawData.institutional_rocket || []).length;
+                document.getElementById('count-three-min').innerText = (rawData.three_min_confirmation || []).length;
+                if (document.getElementById('count-three-step')) {
+                    document.getElementById('count-three-step').innerText = (rawData.three_step_candle || []).length;
+                }
+                document.getElementById('count-sweep-sell').innerText = (rawData.liquidity_sweep_sell || []).length;
+                document.getElementById('count-sweep-buy').innerText = (rawData.liquidity_sweep_buy || []).length;
+                if (document.getElementById('count-shooting-star')) {
+                    document.getElementById('count-shooting-star').innerText = (rawData.shooting_star_bearish || []).length;
+                }
                 document.getElementById('count-intraday').innerText = rawData.intraday.length;
                 document.getElementById('count-monthly').innerText = rawData.monthly.length;
                 document.getElementById('count-best').innerText = rawData.best_setup.length;
@@ -1065,7 +1243,7 @@
         fetchSectorData();
 
         setInterval(fetchScanData, 2000);
-setInterval(fetchSectorData, 15000);
+        setInterval(fetchSectorData, 15000);
     </script>
 </body>
 </html>
